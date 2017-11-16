@@ -1,0 +1,22 @@
+[
+   {
+     "Plan": {
+       "Node Type": "Values Scan",
+       "Parallel Aware": false,
+       "Alias": "*VALUES*",
+       "Startup Cost": 0.00,
+       "Total Cost": 0.04,
+       "Plan Rows": 3,
+       "Plan Width": 36,
+       "Actual Startup Time": 0.228,
+       "Actual Total Time": 0.230,
+       "Actual Rows": 3,
+       "Actual Loops": 1,
+       "Output": ["\"*VALUES*\".column1", "\"*VALUES*\".column2"]
+     },
+     "Planning Time": 0.389,
+     "Triggers": [
+     ],
+     "Execution Time": 0.624
+   }
+]
