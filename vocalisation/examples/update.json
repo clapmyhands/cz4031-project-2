@@ -31,7 +31,7 @@
            "Actual Total Time": 0.081,
            "Actual Rows": 3,
            "Actual Loops": 1,
-           "Output": ["id", "'Z'::character varying(20)", "ctid"],+
+           "Output": ["id", "'Z'::character varying(20)", "ctid"],
            "Filter": "(test.id > 3)",
            "Rows Removed by Filter": 3
          }

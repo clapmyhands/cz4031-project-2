@@ -27,7 +27,7 @@
            "Actual Total Time": 0.001,
            "Actual Rows": 1,
            "Actual Loops": 1,
-           "Output": ["6", "'F'::character varying(20)"]+
+           "Output": ["6", "'F'::character varying(20)"]
          }
        ]
      },

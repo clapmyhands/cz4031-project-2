@@ -18,7 +18,7 @@
        "Plans": [
          {
            "Node Type": "Seq Scan",
-           "Parent Relationship": "Member",+
+           "Parent Relationship": "Member",
            "Parallel Aware": false,
            "Relation Name": "test",
            "Schema": "public",

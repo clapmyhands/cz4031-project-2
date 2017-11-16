@@ -1,0 +1,45 @@
+ [
+   {
+     "Plan": {
+       "Node Type": "Sort",
+       "Parallel Aware": false,
+       "Startup Cost": 62.33,
+       "Total Cost": 64.83,
+       "Plan Rows": 1000,
+       "Plan Width": 8,
+       "Actual Startup Time": 19.542,
+       "Actual Total Time": 20.878,
+       "Actual Rows": 14000,
+       "Actual Loops": 1,
+       "Output": ["(random())"],
+       "Sort Key": ["(random())"],
+       "Sort Method": "quicksort",
+       "Sort Space Used": 1041,
+       "Sort Space Type": "Memory",
+       "Plans": [
+         {
+           "Node Type": "Function Scan",
+           "Parent Relationship": "Outer",
+           "Parallel Aware": false,
+           "Function Name": "generate_series",
+           "Schema": "pg_catalog",
+           "Alias": "i",
+           "Startup Cost": 0.00,
+           "Total Cost": 12.50,
+           "Plan Rows": 1000,
+           "Plan Width": 8,
+           "Actual Startup Time": 7.930,
+           "Actual Total Time": 9.682,
+           "Actual Rows": 14000,
+           "Actual Loops": 1,
+           "Output": ["random()"],
+           "Function Call": "generate_series(1, 14000)"
+         }
+       ]
+     },
+     "Planning Time": 0.659,
+     "Triggers": [
+     ],
+     "Execution Time": 24.832
+   }
+ ]
