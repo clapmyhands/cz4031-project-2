@@ -47,6 +47,24 @@ class ScanHandler(Handler):
         return " ".join(tmp)
 
 
+class SubqueryScanHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node):
+        scan_type = node.get('Node Type')
+
+        alias = node.get('Alias')
+
+        text = "Do {} on result ".format(scan_type, alias)
+
+        if alias:
+            text += "and use {} as alias".format(alias)
+        text += "."
+        print(text)
+        return [text]
+
+
 class LimitHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
@@ -108,7 +126,6 @@ class AggregateHandler(Handler):
         return [text]
 
 
-
 class HandlerWithChilds:
     def __init__(self):
         pass
@@ -150,16 +167,28 @@ class HashJoinHandler(HandlerWithChilds):
         return [text]
 
 
+class UniqueHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node):
+        attribute_name = node.get('Output')[0]
+        text = "Take unique values of {} from result.".format(attribute_name)
+        print(text)
+        return [text]
+
 handler = {
     "Limit": LimitHandler(),
     "Seq Scan": ScanHandler(),
     "Bitmap Index Scan": ScanHandler(),
     "Index Only Scan": ScanHandler(),
+    "Subquery Scan": SubqueryScanHandler(),
     "Sort": SortHandler(),
     "Hash": HashHandler(),
     "Aggregate": AggregateHandler(),
     "Append": AppendHandler(),
-    "Hash Join": HashJoinHandler()
+    "Hash Join": HashJoinHandler(),
+    "Unique": UniqueHandler()
 }
 
 def get_handler_for_nodetype(node_type):

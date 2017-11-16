@@ -99,4 +99,4 @@ def main(filename):
     filter_tree(qep)
 
 if __name__ == '__main__':
-    main('./examples/long.json')
+    main('./examples/unique.json')
