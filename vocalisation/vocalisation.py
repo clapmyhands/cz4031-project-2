@@ -51,7 +51,7 @@ def process_node(node, depth, single_child=True):
     # if output:
     #     string_builder.append("Output: {}".format(output))
 
-    resolved = None
+    resolved = []
     child_txt = []
     if plans:
         if len(plans) > 1:
@@ -67,10 +67,7 @@ def process_node(node, depth, single_child=True):
     current_txt = []
     handler_class = handler.get_handler_for_nodetype(node_type)
     if handler_class:
-        if resolved:
-            current_txt = handler_class.handle_with_childs(node, resolved)
-        else:
-            current_txt = handler_class.handle(node)
+        current_txt = handler_class.handle(node, resolved)
 
     if child_txt: string_builder.extend(child_txt)
     if current_txt: string_builder.extend(current_txt)
@@ -101,4 +98,4 @@ def main(filename):
     filter_tree(qep)
 
 if __name__ == '__main__':
-    main('./examples/insert.json')
+    main('./examples/worktable_scan.json')

@@ -6,7 +6,7 @@ class Handler:
     def __init__(self):
         pass
 
-    def handle(self, node):
+    def handle(self, node, childs):
         pass
 
     @staticmethod
@@ -17,6 +17,15 @@ class Handler:
         my_list = [str(i) for i in list]
         return my_list
 
+    @staticmethod
+    def childs_to_string(childs=None):
+        if childs:
+            if len(childs) == 2:
+                return "{} and {}".format(*childs)
+            else:
+                childs[-1] = "and " + childs[-1]
+                return ", ".join(childs)
+
 
 class ScanHandler(Handler):
     def __init__(self):
@@ -26,7 +35,7 @@ class ScanHandler(Handler):
         }
 
 
-    def handle(self, node):
+    def handle(self, node, childs):
         scan_type = self.__expand_scan(node.get('Node Type'))
         direction = node.get('Scan Direction')
         if direction:
@@ -63,7 +72,7 @@ class BitmapHeapScanHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         direction = node.get('Scan Direction')
         if direction:
@@ -92,7 +101,7 @@ class BitmapIndexScanHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         direction = node.get('Scan Direction')
         if direction:
@@ -113,7 +122,7 @@ class SubqueryScanHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         scan_type = node.get('Node Type')
 
         alias = node.get('Alias')
@@ -131,7 +140,7 @@ class FunctionScanHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
 
         pass
@@ -141,7 +150,7 @@ class ValuesScanHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         text = 'Do {}'.format(node_type)
 
@@ -158,7 +167,7 @@ class LimitHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         limit_row = node.get('Actual Rows')
         text = "Result is limited to {} row".format(limit_row)
         if limit_row > 1:
@@ -172,7 +181,7 @@ class SortHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         # node_type = node.get('Node Type')
         sort_method = node.get('Sort Method')
         sort_key = Handler.stringify_list(node.get('Sort Key'))
@@ -187,7 +196,7 @@ class HashHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         buckets = node.get('Hash Buckets')
         text = "Hash the result using {} buckets.".format(buckets)
         print(text)
@@ -198,7 +207,7 @@ class AggregateHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         strategy = node.get('Strategy')
         node_type = "{} {}".format(strategy, node_type)
@@ -219,26 +228,9 @@ class AggregateHandler(Handler):
         return [text]
 
 
-class HandlerWithChilds:
+class AppendHandler(Handler):
     def __init__(self):
-        pass
-
-    def handle_with_childs(self, node, childs):
-        pass
-
-    @staticmethod
-    def childs_to_string(childs=None):
-        if childs:
-            if len(childs) == 2:
-                return "{} and {}".format(*childs)
-            else:
-                childs[-1] = "and " + childs[-1]
-                return ", ".join(childs)
-
-
-class AppendHandler(HandlerWithChilds):
-    def __init__(self):
-        HandlerWithChilds.__init__(self)
+        Handler.__init__(self)
 
     def handle_with_childs(self, node, childs):
         text = "Append: {}.".format(self.childs_to_string(childs))
@@ -246,9 +238,9 @@ class AppendHandler(HandlerWithChilds):
         return [text]
 
 
-class HashJoinHandler(HandlerWithChilds):
+class HashJoinHandler(Handler):
     def __init__(self):
-        HandlerWithChilds.__init__(self)
+        Handler.__init__(self)
 
 
     def handle_with_childs(self, node, childs):
@@ -262,9 +254,9 @@ class HashJoinHandler(HandlerWithChilds):
         return [text]
 
 
-class NestedLoopJoinHandler(HandlerWithChilds):
+class NestedLoopJoinHandler(Handler):
     def __init__(self):
-        HandlerWithChilds.__init__(self)
+        Handler.__init__(self)
 
     def handle_with_childs(self, node, childs):
         node_type = node.get('Node Type')
@@ -277,9 +269,9 @@ class NestedLoopJoinHandler(HandlerWithChilds):
         return [text]
 
 
-class MergeJoinHandler(HandlerWithChilds):
+class MergeJoinHandler(Handler):
     def __init__(self):
-        HandlerWithChilds.__init__(self)
+        Handler.__init__(self)
 
     def handle_with_childs(self, node, childs):
         node_type = node.get('Node Type')
@@ -296,7 +288,7 @@ class UniqueHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         attribute_name = node.get('Output')[0]
         text = "Take unique values of {} from result.".format(attribute_name)
         print(text)
@@ -307,7 +299,7 @@ class DeleteHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         relation = node.get('Relation Name')
         text = "Delete result from relation {}.".format(relation)
         print(text)
@@ -318,7 +310,7 @@ class InsertHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         # node_type = node.get('Node Type')
         text = 'Insert result'
 
@@ -335,13 +327,13 @@ class UpdateHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         pass
 
 
-class BitmapHandler(HandlerWithChilds):
+class BitmapHandler(Handler):
     def __init__(self):
-        HandlerWithChilds.__init__(self)
+        Handler.__init__(self)
 
     def handle_with_childs(self, node, childs):
         node_type = node.get('Node Type')
@@ -356,7 +348,7 @@ class MaterializeHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         text = '{} the result'.format(node_type)
         text += '.'
@@ -368,7 +360,7 @@ class ResultHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle(self, node):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         text = "{}".format(node_type)
 
