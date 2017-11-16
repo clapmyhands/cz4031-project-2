@@ -40,7 +40,8 @@ def process_node(node, depth, single_child=True):
 
     # string_builder.append("Depth: {}".format(depth))
 
-    node_type = node.get('Node Type')
+    node_type = node.get('Operation', node.get('Node Type'))
+
     # string_builder.append("Type: {}".format(node_type))
 
     # if plans:
@@ -85,8 +86,9 @@ def filter_tree(qep):
     plan = qep[0].get('Plan')
     plan_list = process_node(plan, 0)
     final_plan = " ".join(plan_list)
-    engine.say(final_plan)
-    engine.runAndWait()
+    print(final_plan)
+    # engine.say(final_plan)
+    # engine.runAndWait()
 
 
 
@@ -99,4 +101,4 @@ def main(filename):
     filter_tree(qep)
 
 if __name__ == '__main__':
-    main('./examples/unique.json')
+    main('./examples/insert.json')
