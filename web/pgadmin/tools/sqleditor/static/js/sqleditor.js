@@ -205,6 +205,16 @@ define('tools.querytool', [
         content: '<div class="sql-editor-explain"></div>'
       })
 
+      var explain_tts = new pgAdmin.Browser.Panel({
+        name: 'explain_tts',
+        title: gettext("Explain TTS"),
+        width: '100%',
+        height: '100%',
+        isCloseable: false,
+        isPrivate: true,
+        content: '<div class="sql-editor-explain-tts"></div>'
+      })
+
       var messages = new pgAdmin.Browser.Panel({
         name: 'messages',
         title: gettext("Messages"),
@@ -228,12 +238,14 @@ define('tools.querytool', [
       // Load all the created panels
       data_output.load(main_docker);
       explain.load(main_docker);
+      explain_tts.load(main_docker);
       messages.load(main_docker);
       history.load(main_docker);
 
       // Add all the panels to the docker
       self.data_output_panel = main_docker.addPanel('data_output', wcDocker.DOCK.BOTTOM, sql_panel_obj);
       self.explain_panel = main_docker.addPanel('explain', wcDocker.DOCK.STACKED, self.data_output_panel);
+      self.explain_tts = main_docker.addPanel('explain_tts', wcDocker.DOCK.STACKED, self.data_output_panel);
       self.messages_panel = main_docker.addPanel('messages', wcDocker.DOCK.STACKED, self.data_output_panel);
       self.history_panel = main_docker.addPanel('history', wcDocker.DOCK.STACKED, self.data_output_panel);
 
@@ -1776,6 +1788,7 @@ define('tools.querytool', [
                     'pgadmin-sqleditor:loading-icon:message',
                     gettext("Loading data from the database server and rendering...")
                   );
+                  console.log(res.data.qep_info);
 
                   self.call_render_after_poll(res.data);
                 }
@@ -1842,7 +1855,7 @@ define('tools.querytool', [
         self.cell_selected = false;
         self.selected_model = null;
         self.changedModels = [];
-        $('.sql-editor-explain').empty();
+        $('.sql-editor-explain').empty();       
 
         /* If object don't have primary keys then set the
          * can_edit flag to false.
@@ -1920,6 +1933,7 @@ define('tools.querytool', [
               _.isObject(data.result[0][0][0]['Plan'])
             ) {
               var explain_data = [JSON.stringify(data.result[0][0], null, 2)];
+              console.log(JSON.stringify(data.result[0][0][0]));
               explain_data_array.push(explain_data);
               // Make sure - the 'Data Output' panel is visible, before - we
               // start rendering the grid.
@@ -1936,6 +1950,35 @@ define('tools.querytool', [
                   pgExplain.DrawJSONPlan(
                     $('.sql-editor-explain'), data.result[0][0]
                   );
+                  let qep_info = '\n\n' + 'Query Plan Describtion:\n' + data.qep_info + 
+                    "\n\nPlease look at Explain Panel for visualization" + '\n\n';
+                  self.update_msg_history(true, qep_info, false);
+                  $.ajax({
+                    url: url_for('sqleditor.qep_tts', {'trans_id': self.transId}),
+                    method: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(qep_info),
+                    success: function (res) {
+                      if (res.success == 1) {
+                        console.log("TTS complete");
+                      }
+                    },
+                    error: function (e) {
+                      if (e.readyState == 0) {
+                        self.update_msg_history(false,
+                          gettext("Not connected to the server or the connection to the server has been closed.")
+                        );
+                        return;
+                      }
+          
+                      var msg = e.responseText;
+                      if (e.responseJSON != undefined &&
+                        e.responseJSON.errormsg != undefined)
+                        msg = e.responseJSON.errormsg;
+          
+                      self.update_msg_history(false, msg);
+                    }
+                  });
                 }, 10
               );
             } else {
@@ -2309,8 +2352,8 @@ define('tools.querytool', [
           $.ajax({
             url: url_for('sqleditor.save', {'trans_id': self.transId}),
             method: 'POST',
-            contentType: "application/json",
-            data: JSON.stringify(req_data),
+            contentType: "text/plain",
+            data: req_data,
             success: function (res) {
               var grid = self.slickgrid,
                 dataView = grid.getData(),
@@ -3132,7 +3175,9 @@ define('tools.querytool', [
         var self = this,
           sql = '',
           history_msg = '';
-
+        
+        //console.log("TTS: ");
+        //console.log(tts);
         self.has_more_rows = false;
         self.fetching_rows = false;
 
@@ -3166,7 +3211,12 @@ define('tools.querytool', [
         self._init_polling_flags();
         self.disable_tool_buttons(true);
         $("#btn-cancel-query").prop('disabled', false);
-
+        /* 
+        if (tts == undefined)
+          tts = false;
+        
+        let data_pkg = {sql:sql, tts: tts}
+        */
         $.ajax({
           url: url_for('sqleditor.query_tool_start', {'trans_id': self.transId}),
           method: 'POST',
