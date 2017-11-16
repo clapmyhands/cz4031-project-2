@@ -1,0 +1,79 @@
+[
+   {
+     "Plan": {
+       "Node Type": "Limit",
+       "Parallel Aware": false,
+       "Startup Cost": 0.86,
+       "Total Cost": 5.25,
+       "Plan Rows": 100,
+       "Plan Width": 4,
+       "Actual Startup Time": 0.235,
+       "Actual Total Time": 0.318,
+       "Actual Rows": 100,
+       "Actual Loops": 1,
+       "Output": ["test3.id"],
+       "Plans": [
+         {
+           "Node Type": "Merge Append",
+           "Parent Relationship": "Outer",
+           "Parallel Aware": false,
+           "Startup Cost": 0.86,
+           "Total Cost": 96550.92,
+           "Plan Rows": 2200002,
+           "Plan Width": 4,
+           "Actual Startup Time": 0.234,
+           "Actual Total Time": 0.296,
+           "Actual Rows": 100,
+           "Actual Loops": 1,
+           "Sort Key": ["test3.id"],
+           "Plans": [
+             {
+               "Node Type": "Index Only Scan",
+               "Parent Relationship": "Member",
+               "Parallel Aware": false,
+               "Scan Direction": "Forward",
+               "Index Name": "test3_id_idx",
+               "Relation Name": "test3",
+               "Schema": "public",
+               "Alias": "test3",
+               "Startup Cost": 0.43,
+               "Total Cost": 34525.44,
+               "Plan Rows": 1100001,
+               "Plan Width": 4,
+               "Actual Startup Time": 0.216,
+               "Actual Total Time": 0.231,
+               "Actual Rows": 50,
+               "Actual Loops": 1,
+               "Output": ["test3.id"],
+               "Heap Fetches": 50
+             },
+             {
+               "Node Type": "Index Only Scan",
+               "Parent Relationship": "Member",
+               "Parallel Aware": false,
+               "Scan Direction": "Forward",
+               "Index Name": "test3_id_idx",
+               "Relation Name": "test3",
+               "Schema": "public",
+               "Alias": "test3_1",
+               "Startup Cost": 0.43,
+               "Total Cost": 34525.44,
+               "Plan Rows": 1100001,
+               "Plan Width": 4,
+               "Actual Startup Time": 0.016,
+               "Actual Total Time": 0.047,
+               "Actual Rows": 51,
+               "Actual Loops": 1,
+               "Output": ["test3_1.id"],
+               "Heap Fetches": 51
+             }
+           ]
+         }
+       ]
+     },
+     "Planning Time": 8.441,
+     "Triggers": [
+     ],
+     "Execution Time": 23.345
+   }
+]
