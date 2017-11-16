@@ -1,4 +1,4 @@
- [
+[
    {
      "Plan": {
        "Node Type": "Sort",
@@ -42,4 +42,4 @@
      ],
      "Execution Time": 24.832
    }
- ]
+]
