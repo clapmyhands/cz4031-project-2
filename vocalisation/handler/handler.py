@@ -162,6 +162,19 @@ class ValuesScanHandler(Handler):
         print(text)
         return [text]
 
+class CTEScanHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        node_type = node.get('Node Type')
+        cte_name = node.get('CTE Name')
+        alias = node.get('Alias')
+        text = 'Do {} on result set {} with alias {}.'.format(node_type, cte_name, alias)
+
+        print(text)
+        return [text]
+
 
 class LimitHandler(Handler):
     def __init__(self):
@@ -383,6 +396,7 @@ handler = {
     "Subquery Scan": SubqueryScanHandler(),
     "Function Scan": FunctionScanHandler(),
     "Values Scan": ValuesScanHandler(),
+    "CTE Scan": CTEScanHandler(),
     "Sort": SortHandler(),
     "Hash": HashHandler(),
     "Aggregate": AggregateHandler(),
