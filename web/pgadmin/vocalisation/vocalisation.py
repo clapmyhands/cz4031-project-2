@@ -6,7 +6,7 @@ import sys
 import handler
 import pyttsx3
 
-engine = pyttsx3.init()
+engine = pyttsx3.init('nsss')
 
 class TempResultCounter:
     def __init__(self):
@@ -89,8 +89,8 @@ def filter_tree(qep):
     plan_list = process_node(plan, 0)
     final_plan = " ".join(plan_list)
     print(final_plan)
-    engine.say(final_plan)
-    engine.runAndWait()
+    # engine.say(final_plan)
+    # engine.runAndWait()
 
 
 

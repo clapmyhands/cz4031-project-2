@@ -17,6 +17,7 @@ python vocalisation/vocalisation.py "path to json"
 '''
 For the GUI, we use pgAdmin 4 as website. The client is javascript based and the backend is python based (Flask Framework).
 It is recommended that the python server and the GUI run in the same computer since TTS program is implemented in python server.
+Known bug: speech voice can only play once because of threading issue. So, you need to restart server again to run speech voice again.
 
 To run the GUI:
 1. install python packages requirements by command 
