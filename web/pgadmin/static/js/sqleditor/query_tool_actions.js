@@ -47,6 +47,12 @@ let queryToolActions = {
     sqlEditorController.execute(explainQuery);
   },
 
+  explainTTS: function (sqlEditorController) {
+    let explainQuery = `EXPLAIN (FORMAT JSON, ANALYZE ON, VERBOSE ON, COSTS OFF, BUFFERS OFF, TIMING OFF) `;
+    console.log(explainQuery);
+    sqlEditorController.execute(explainQuery, 1);
+  },
+
   download: function (sqlEditorController) {
     let sqlQuery = sqlEditorController.gridView.query_tool_obj.getSelection();
 

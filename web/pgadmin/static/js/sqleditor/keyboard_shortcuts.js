@@ -1,4 +1,5 @@
 const F5_KEY = 116,
+  F6_KEY = 117,
   F7_KEY = 118,
   F8_KEY = 119,
   PERIOD_KEY = 190,
@@ -14,6 +15,9 @@ function keyboardShortcuts(sqlEditorController, queryToolActions, event) {
   if (keyCode === F5_KEY) {
     event.preventDefault();
     queryToolActions.executeQuery(sqlEditorController);
+  } else if (keyCode == F6_KEY) {
+    event.preventDefault();
+    queryToolActions.explainTTS(sqlEditorController);
   } else if (event.shiftKey && keyCode === F7_KEY) {
     _stopEventPropagation();
     queryToolActions.explainAnalyze(sqlEditorController);

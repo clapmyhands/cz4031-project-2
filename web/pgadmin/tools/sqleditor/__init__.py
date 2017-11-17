@@ -576,9 +576,9 @@ def qep_tts(trans_id):
 
     return success_return()
 
-@blueprint.route('/poll/<int:trans_id>', methods=["GET"], endpoint='poll')
+@blueprint.route('/poll/<int:trans_id>/<int:tts>', methods=["GET"], endpoint='poll')
 @login_required
-def poll(trans_id):
+def poll(trans_id, tts):
     """
     This method polls the result of the asynchronous query and returns the result.
 
@@ -734,7 +734,7 @@ def poll(trans_id):
 
     qep_info = ""
 
-    if status == 'Success':
+    if status == 'Success' and tts == 1:
         if type(result) is list and type(result[0]) is list and type(result[0][0]) is list and type(result[0][0][0]) is dict and "Plan" in result[0][0][0]:
             qep_info = "Hellooo"
     
