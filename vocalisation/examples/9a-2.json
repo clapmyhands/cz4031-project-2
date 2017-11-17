@@ -1,0 +1,45 @@
+[
+  {
+    "Plan": {
+      "Startup Cost": 28814.84,
+      "Plans": [
+        {
+          "Startup Cost": 28814.84,
+          "Plans": [
+            {
+              "Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) >= '1988'::double precision))",
+              "Startup Cost": 0,
+              "Node Type": "Seq Scan",
+              "Plan Rows": 3825,
+              "Relation Name": "h_family",
+              "Alias": "h_family",
+              "Parallel Aware": false,
+              "Parent Relationship": "Outer",
+              "Plan Width": 40,
+              "Total Cost": 28587.23
+            }
+          ],
+          "Sort Key": [
+            "author_name",
+            "(date_part('year'::text, (pub_date)::timestamp without time zone))"
+          ],
+          "Node Type": "Sort",
+          "Plan Rows": 3825,
+          "Parallel Aware": false,
+          "Parent Relationship": "Outer",
+          "Plan Width": 40,
+          "Total Cost": 28824.4
+        }
+      ],
+      "Node Type": "Group",
+      "Plan Rows": 3657,
+      "Parallel Aware": false,
+      "Group Key": [
+        "author_name",
+        "(date_part('year'::text, (pub_date)::timestamp without time zone))"
+      ],
+      "Plan Width": 40,
+      "Total Cost": 28861.81
+    }
+  }
+]

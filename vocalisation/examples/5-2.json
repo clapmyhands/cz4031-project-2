@@ -1,0 +1,173 @@
+[
+  {
+    "Plan": {
+      "Sort Key": [
+        "('1970-1979'::text)"
+      ],
+      "Plans": [
+        {
+          "Partial Mode": "Simple",
+          "Plans": [
+            {
+              "Parent Relationship": "Outer",
+              "Plans": [
+                {
+                  "Parent Relationship": "Member",
+                  "Alias": "*SELECT* 1",
+                  "Plans": [
+                    {
+                      "Partial Mode": "Simple",
+                      "Plans": [
+                        {
+                          "Filter": "((year >= '1970'::double precision) AND (year <= '1979'::double precision))",
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "yearly_count",
+                          "Alias": "yearly_count",
+                          "Parallel Aware": false,
+                          "Parent Relationship": "Outer"
+                        }
+                      ],
+                      "Node Type": "Aggregate",
+                      "Strategy": "Sorted",
+                      "Parallel Aware": false,
+                      "Group Key": [
+                        "'1970-1979'::text"
+                      ],
+                      "Parent Relationship": "Subquery"
+                    }
+                  ],
+                  "Node Type": "Subquery Scan",
+                  "Parallel Aware": false
+                },
+                {
+                  "Parent Relationship": "Member",
+                  "Alias": "*SELECT* 2",
+                  "Plans": [
+                    {
+                      "Partial Mode": "Simple",
+                      "Plans": [
+                        {
+                          "Filter": "((year >= '1980'::double precision) AND (year <= '1989'::double precision))",
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "yearly_count",
+                          "Alias": "yearly_count_1",
+                          "Parallel Aware": false,
+                          "Parent Relationship": "Outer"
+                        }
+                      ],
+                      "Node Type": "Aggregate",
+                      "Strategy": "Sorted",
+                      "Parallel Aware": false,
+                      "Group Key": [
+                        "'1980-1989'::text"
+                      ],
+                      "Parent Relationship": "Subquery"
+                    }
+                  ],
+                  "Node Type": "Subquery Scan",
+                  "Parallel Aware": false
+                },
+                {
+                  "Parent Relationship": "Member",
+                  "Alias": "*SELECT* 3",
+                  "Plans": [
+                    {
+                      "Partial Mode": "Simple",
+                      "Plans": [
+                        {
+                          "Filter": "((year >= '1990'::double precision) AND (year <= '1999'::double precision))",
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "yearly_count",
+                          "Alias": "yearly_count_2",
+                          "Parallel Aware": false,
+                          "Parent Relationship": "Outer"
+                        }
+                      ],
+                      "Node Type": "Aggregate",
+                      "Strategy": "Sorted",
+                      "Parallel Aware": false,
+                      "Group Key": [
+                        "'1990-1999'::text"
+                      ],
+                      "Parent Relationship": "Subquery"
+                    }
+                  ],
+                  "Node Type": "Subquery Scan",
+                  "Parallel Aware": false
+                },
+                {
+                  "Parent Relationship": "Member",
+                  "Alias": "*SELECT* 4",
+                  "Plans": [
+                    {
+                      "Partial Mode": "Simple",
+                      "Plans": [
+                        {
+                          "Filter": "((year >= '2000'::double precision) AND (year <= '2009'::double precision))",
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "yearly_count",
+                          "Alias": "yearly_count_3",
+                          "Parallel Aware": false,
+                          "Parent Relationship": "Outer"
+                        }
+                      ],
+                      "Node Type": "Aggregate",
+                      "Strategy": "Sorted",
+                      "Parallel Aware": false,
+                      "Group Key": [
+                        "'2000-2009'::text"
+                      ],
+                      "Parent Relationship": "Subquery"
+                    }
+                  ],
+                  "Node Type": "Subquery Scan",
+                  "Parallel Aware": false
+                },
+                {
+                  "Parent Relationship": "Member",
+                  "Alias": "*SELECT* 5",
+                  "Plans": [
+                    {
+                      "Partial Mode": "Simple",
+                      "Plans": [
+                        {
+                          "Filter": "((year >= '2010'::double precision) AND (year <= '2019'::double precision))",
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "yearly_count",
+                          "Alias": "yearly_count_4",
+                          "Parallel Aware": false,
+                          "Parent Relationship": "Outer"
+                        }
+                      ],
+                      "Node Type": "Aggregate",
+                      "Strategy": "Sorted",
+                      "Parallel Aware": false,
+                      "Group Key": [
+                        "'2010-2019'::text"
+                      ],
+                      "Parent Relationship": "Subquery"
+                    }
+                  ],
+                  "Node Type": "Subquery Scan",
+                  "Parallel Aware": false
+                }
+              ],
+              "Node Type": "Append",
+              "Parallel Aware": false
+            }
+          ],
+          "Node Type": "Aggregate",
+          "Strategy": "Hashed",
+          "Parallel Aware": false,
+          "Group Key": [
+            "('1970-1979'::text)",
+            "\"*SELECT* 1\".decade_paper_count"
+          ],
+          "Parent Relationship": "Outer"
+        }
+      ],
+      "Node Type": "Sort",
+      "Parallel Aware": false
+    }
+  }
+]

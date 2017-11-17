@@ -1,0 +1,73 @@
+[
+  {
+    "Plan": {
+      "Partial Mode": "Finalize",
+      "Startup Cost": 22875.93,
+      "Plans": [
+        {
+          "Startup Cost": 22875.93,
+          "Plans": [
+            {
+              "Partial Mode": "Partial",
+              "Startup Cost": 21875.92,
+              "Plans": [
+                {
+                  "Startup Cost": 21875.92,
+                  "Plans": [
+                    {
+                      "Startup Cost": 0,
+                      "Node Type": "Seq Scan",
+                      "Plan Rows": 170005,
+                      "Relation Name": "author_year_1988_2017",
+                      "Alias": "author_year_1988_2017",
+                      "Parallel Aware": true,
+                      "Parent Relationship": "Outer",
+                      "Plan Width": 22,
+                      "Total Cost": 3617.05
+                    }
+                  ],
+                  "Sort Key": [
+                    "author_name"
+                  ],
+                  "Node Type": "Sort",
+                  "Plan Rows": 170005,
+                  "Parallel Aware": false,
+                  "Parent Relationship": "Outer",
+                  "Plan Width": 22,
+                  "Total Cost": 22300.93
+                }
+              ],
+              "Node Type": "Aggregate",
+              "Strategy": "Sorted",
+              "Plan Rows": 54189,
+              "Parallel Aware": false,
+              "Group Key": [
+                "author_name"
+              ],
+              "Parent Relationship": "Outer",
+              "Plan Width": 38,
+              "Total Cost": 24542.87
+            }
+          ],
+          "Workers Planned": 1,
+          "Node Type": "Gather Merge",
+          "Plan Rows": 54189,
+          "Parallel Aware": false,
+          "Parent Relationship": "Outer",
+          "Plan Width": 38,
+          "Total Cost": 31639.15
+        }
+      ],
+      "Node Type": "Aggregate",
+      "Strategy": "Sorted",
+      "Filter": "((max(year) = '2017'::double precision) AND (min(year) = '1988'::double precision) AND (count(year) = 30))",
+      "Plan Rows": 54189,
+      "Parallel Aware": false,
+      "Group Key": [
+        "author_name"
+      ],
+      "Plan Width": 14,
+      "Total Cost": 32722.93
+    }
+  }
+]

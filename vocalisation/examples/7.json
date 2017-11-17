@@ -1,0 +1,518 @@
+[
+    {
+      "Execution Time": 55576.124,
+      "Planning Time": 29.389,
+      "Plan": {
+        "Plans": [
+          {
+            "Plans": [
+              {
+                "Partial Mode": "Simple",
+                "Plans": [
+                  {
+                    "Plans": [
+                      {
+                        "Inner Unique": false,
+                        "Plans": [
+                          {
+                            "Plans": [
+                              {
+                                "Plans": [
+                                  {
+                                    "Partial Mode": "Simple",
+                                    "Plans": [
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Plans": [
+                                              {
+                                                "Partial Mode": "Simple",
+                                                "Plans": [
+                                                  {
+                                                    "Plans": [
+                                                      {
+                                                        "Filter": "(title ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                        "Rows Removed by Index Recheck": 0,
+                                                        "Plans": [
+                                                          {
+                                                            "Node Type": "Bitmap Index Scan",
+                                                            "Index Cond": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2013'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+                                                            "Parallel Aware": false,
+                                                            "Actual Rows": 10967,
+                                                            "Parent Relationship": "Outer",
+                                                            "Actual Loops": 1,
+                                                            "Index Name": "proceedings_date"
+                                                          }
+                                                        ],
+                                                        "Exact Heap Blocks": 890,
+                                                        "Node Type": "Bitmap Heap Scan",
+                                                        "Lossy Heap Blocks": 0,
+                                                        "Relation Name": "proceedings",
+                                                        "Alias": "proceedings",
+                                                        "Parallel Aware": false,
+                                                        "Actual Rows": 743,
+                                                        "Recheck Cond": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2013'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+                                                        "Parent Relationship": "Member",
+                                                        "Rows Removed by Filter": 10224,
+                                                        "Actual Loops": 1
+                                                      },
+                                                      {
+                                                        "Filter": "(title ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                        "Rows Removed by Index Recheck": 0,
+                                                        "Plans": [
+                                                          {
+                                                            "Node Type": "Bitmap Index Scan",
+                                                            "Index Cond": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2013'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+                                                            "Parallel Aware": false,
+                                                            "Actual Rows": 608146,
+                                                            "Parent Relationship": "Outer",
+                                                            "Actual Loops": 1,
+                                                            "Index Name": "inproceedings_date"
+                                                          }
+                                                        ],
+                                                        "Exact Heap Blocks": 33467,
+                                                        "Node Type": "Bitmap Heap Scan",
+                                                        "Lossy Heap Blocks": 0,
+                                                        "Relation Name": "inproceedings",
+                                                        "Alias": "inproceedings",
+                                                        "Parallel Aware": false,
+                                                        "Actual Rows": 44751,
+                                                        "Recheck Cond": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2013'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+                                                        "Parent Relationship": "Member",
+                                                        "Rows Removed by Filter": 563395,
+                                                        "Actual Loops": 1
+                                                      }
+                                                    ],
+                                                    "Node Type": "Append",
+                                                    "Parallel Aware": false,
+                                                    "Actual Rows": 45494,
+                                                    "Parent Relationship": "Outer",
+                                                    "Actual Loops": 1
+                                                  }
+                                                ],
+                                                "Node Type": "Aggregate",
+                                                "Strategy": "Hashed",
+                                                "Parallel Aware": false,
+                                                "Actual Rows": 45494,
+                                                "Group Key": [
+                                                  "proceedings.pub_id",
+                                                  "proceedings.pub_key",
+                                                  "proceedings.title",
+                                                  "proceedings.pub_date",
+                                                  "proceedings.booktitle"
+                                                ],
+                                                "Parent Relationship": "Subquery",
+                                                "Actual Loops": 1
+                                              }
+                                            ],
+                                            "Node Type": "Subquery Scan",
+                                            "Alias": "proceedings_inproceedings",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 45494,
+                                            "Parent Relationship": "Member",
+                                            "Actual Loops": 1
+                                          },
+                                          {
+                                            "Filter": "(title ~ '^(?:.*[dD]ata.*)$'::text)",
+                                            "Rows Removed by Index Recheck": 0,
+                                            "Plans": [
+                                              {
+                                                "Node Type": "Bitmap Index Scan",
+                                                "Index Cond": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2013'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+                                                "Parallel Aware": false,
+                                                "Actual Rows": 579974,
+                                                "Parent Relationship": "Outer",
+                                                "Actual Loops": 1,
+                                                "Index Name": "article_date"
+                                              }
+                                            ],
+                                            "Exact Heap Blocks": 34068,
+                                            "Node Type": "Bitmap Heap Scan",
+                                            "Lossy Heap Blocks": 0,
+                                            "Relation Name": "article",
+                                            "Alias": "article",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 35071,
+                                            "Recheck Cond": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2013'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+                                            "Parent Relationship": "Member",
+                                            "Rows Removed by Filter": 544903,
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Node Type": "Append",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 80565,
+                                        "Parent Relationship": "Outer",
+                                        "Actual Loops": 1
+                                      }
+                                    ],
+                                    "Node Type": "Aggregate",
+                                    "Strategy": "Hashed",
+                                    "Parallel Aware": false,
+                                    "Actual Rows": 80565,
+                                    "Group Key": [
+                                      "proceedings_inproceedings.pub_id",
+                                      "proceedings_inproceedings.title",
+                                      "proceedings_inproceedings.pub_date",
+                                      "proceedings_inproceedings.booktitle"
+                                    ],
+                                    "Parent Relationship": "Subquery",
+                                    "Actual Loops": 1
+                                  }
+                                ],
+                                "Node Type": "Subquery Scan",
+                                "Alias": "cjp",
+                                "Parallel Aware": false,
+                                "Actual Rows": 80565,
+                                "Parent Relationship": "Outer",
+                                "Actual Loops": 1
+                              }
+                            ],
+                            "Sort Space Type": "Disk",
+                            "Sort Key": [
+                              "cjp.pub_id"
+                            ],
+                            "Node Type": "Sort",
+                            "Sort Space Used": 1112,
+                            "Sort Method": "external merge",
+                            "Parallel Aware": false,
+                            "Actual Rows": 80565,
+                            "Parent Relationship": "Outer",
+                            "Actual Loops": 1
+                          },
+                          {
+                            "Plans": [
+                              {
+                                "Inner Unique": false,
+                                "Plans": [
+                                  {
+                                    "Plans": [
+                                      {
+                                        "Scan Direction": "Forward",
+                                        "Heap Fetches": 0,
+                                        "Node Type": "Index Only Scan",
+                                        "Relation Name": "publication",
+                                        "Alias": "pb",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 0,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1,
+                                        "Index Name": "publication_pkey"
+                                      },
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Node Type": "Seq Scan",
+                                            "Relation Name": "article",
+                                            "Alias": "pb_1",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 1692737,
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Disk",
+                                        "Sort Key": [
+                                          "pb_1.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 23176,
+                                        "Sort Method": "external merge",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 1692737,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1
+                                      },
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Node Type": "Seq Scan",
+                                            "Relation Name": "book",
+                                            "Alias": "pb_2",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 13750,
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Memory",
+                                        "Sort Key": [
+                                          "pb_2.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 1029,
+                                        "Sort Method": "quicksort",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 11982,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1
+                                      },
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Node Type": "Seq Scan",
+                                            "Relation Name": "incollection",
+                                            "Alias": "pb_3",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 45430,
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Memory",
+                                        "Sort Key": [
+                                          "pb_3.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 3495,
+                                        "Sort Method": "quicksort",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 39145,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1
+                                      },
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Node Type": "Seq Scan",
+                                            "Relation Name": "inproceedings",
+                                            "Alias": "pb_4",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 2038302,
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Disk",
+                                        "Sort Key": [
+                                          "pb_4.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 27904,
+                                        "Sort Method": "external merge",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 2038296,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1
+                                      },
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Node Type": "Seq Scan",
+                                            "Relation Name": "masters_thesis",
+                                            "Alias": "pb_5",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 10,
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Memory",
+                                        "Sort Key": [
+                                          "pb_5.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 25,
+                                        "Sort Method": "quicksort",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 7,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1
+                                      },
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Node Type": "Seq Scan",
+                                            "Relation Name": "phd_thesis",
+                                            "Alias": "pb_6",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 61782,
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Disk",
+                                        "Sort Key": [
+                                          "pb_6.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 848,
+                                        "Sort Method": "external sort",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 815,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1
+                                      },
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Node Type": "Seq Scan",
+                                            "Relation Name": "proceedings",
+                                            "Alias": "pb_7",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 34700,
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Memory",
+                                        "Sort Key": [
+                                          "pb_7.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 2992,
+                                        "Sort Method": "quicksort",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 34692,
+                                        "Parent Relationship": "Member",
+                                        "Actual Loops": 1
+                                      }
+                                    ],
+                                    "Sort Key": [
+                                      "pb.pub_id"
+                                    ],
+                                    "Node Type": "Merge Append",
+                                    "Parallel Aware": false,
+                                    "Actual Rows": 3817669,
+                                    "Parent Relationship": "Outer",
+                                    "Actual Loops": 1
+                                  },
+                                  {
+                                    "Plans": [
+                                      {
+                                        "Plans": [
+                                          {
+                                            "Inner Unique": true,
+                                            "Plans": [
+                                              {
+                                                "Node Type": "Seq Scan",
+                                                "Relation Name": "authored",
+                                                "Alias": "aed",
+                                                "Parallel Aware": false,
+                                                "Actual Rows": 11080092,
+                                                "Parent Relationship": "Outer",
+                                                "Actual Loops": 1
+                                              },
+                                              {
+                                                "Hash Buckets": 65536,
+                                                "Plans": [
+                                                  {
+                                                    "Node Type": "Seq Scan",
+                                                    "Relation Name": "author",
+                                                    "Alias": "a",
+                                                    "Parallel Aware": false,
+                                                    "Actual Rows": 11080092,
+                                                    "Parent Relationship": "Outer",
+                                                    "Actual Loops": 1
+                                                  }
+                                                ],
+                                                "Original Hash Buckets": 65536,
+                                                "Hash Batches": 256,
+                                                "Node Type": "Hash",
+                                                "Parallel Aware": false,
+                                                "Actual Rows": 11080092,
+                                                "Parent Relationship": "Inner",
+                                                "Peak Memory Usage": 2745,
+                                                "Original Hash Batches": 256,
+                                                "Actual Loops": 1
+                                              }
+                                            ],
+                                            "Node Type": "Hash Join",
+                                            "Join Type": "Inner",
+                                            "Parallel Aware": false,
+                                            "Actual Rows": 11080092,
+                                            "Hash Cond": "(aed.author_id = a.author_id)",
+                                            "Parent Relationship": "Outer",
+                                            "Actual Loops": 1
+                                          }
+                                        ],
+                                        "Sort Space Type": "Disk",
+                                        "Sort Key": [
+                                          "aed.pub_id"
+                                        ],
+                                        "Node Type": "Sort",
+                                        "Sort Space Used": 317264,
+                                        "Sort Method": "external merge",
+                                        "Parallel Aware": false,
+                                        "Actual Rows": 10998524,
+                                        "Parent Relationship": "Outer",
+                                        "Actual Loops": 1
+                                      }
+                                    ],
+                                    "Node Type": "Materialize",
+                                    "Parallel Aware": false,
+                                    "Actual Rows": 10998524,
+                                    "Parent Relationship": "Inner",
+                                    "Actual Loops": 1
+                                  }
+                                ],
+                                "Node Type": "Merge Join",
+                                "Join Type": "Inner",
+                                "Parallel Aware": false,
+                                "Actual Rows": 10998524,
+                                "Parent Relationship": "Outer",
+                                "Merge Cond": "(pb.pub_id = aed.pub_id)",
+                                "Actual Loops": 1
+                              }
+                            ],
+                            "Node Type": "Materialize",
+                            "Parallel Aware": false,
+                            "Actual Rows": 10998524,
+                            "Parent Relationship": "Inner",
+                            "Actual Loops": 1
+                          }
+                        ],
+                        "Node Type": "Merge Join",
+                        "Join Type": "Inner",
+                        "Parallel Aware": false,
+                        "Actual Rows": 296634,
+                        "Parent Relationship": "Outer",
+                        "Merge Cond": "(cjp.pub_id = pb.pub_id)",
+                        "Actual Loops": 1
+                      }
+                    ],
+                    "Sort Space Type": "Disk",
+                    "Sort Key": [
+                      "a.author_name"
+                    ],
+                    "Node Type": "Sort",
+                    "Sort Space Used": 8880,
+                    "Sort Method": "external merge",
+                    "Parallel Aware": false,
+                    "Actual Rows": 296634,
+                    "Parent Relationship": "Outer",
+                    "Actual Loops": 1
+                  }
+                ],
+                "Node Type": "Aggregate",
+                "Strategy": "Sorted",
+                "Parallel Aware": false,
+                "Actual Rows": 157739,
+                "Group Key": [
+                  "a.author_name"
+                ],
+                "Parent Relationship": "Outer",
+                "Actual Loops": 1
+              }
+            ],
+            "Sort Space Type": "Memory",
+            "Sort Key": [
+              "(count(DISTINCT cjp.pub_id)) DESC"
+            ],
+            "Node Type": "Sort",
+            "Sort Space Used": 25,
+            "Sort Method": "top-N heapsort",
+            "Parallel Aware": false,
+            "Actual Rows": 10,
+            "Parent Relationship": "Outer",
+            "Actual Loops": 1
+          }
+        ],
+        "Actual Loops": 1,
+        "Node Type": "Limit",
+        "Actual Rows": 10,
+        "Parallel Aware": false
+      },
+      "Triggers": []
+    }
+  ]

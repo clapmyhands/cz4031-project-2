@@ -1,0 +1,114 @@
+[
+    {
+      "Plan": {
+        "Sort Key": [
+          "(count(*))"
+        ],
+        "Plans": [
+          {
+            "Partial Mode": "Simple",
+            "Plans": [
+              {
+                "Partial Mode": "Finalize",
+                "Plans": [
+                  {
+                    "Workers Planned": 2,
+                    "Parent Relationship": "Outer",
+                    "Plans": [
+                      {
+                        "Partial Mode": "Partial",
+                        "Plans": [
+                          {
+                            "Parent Relationship": "Outer",
+                            "Plans": [
+                              {
+                                "Inner Unique": true,
+                                "Plans": [
+                                  {
+                                    "Relation Name": "inproceedings",
+                                    "Parent Relationship": "Outer",
+                                    "Alias": "inproceedings",
+                                    "Node Type": "Seq Scan",
+                                    "Parallel Aware": true
+                                  },
+                                  {
+                                    "Parent Relationship": "Inner",
+                                    "Plans": [
+                                      {
+                                        "Parent Relationship": "Outer",
+                                        "Plans": [
+                                          {
+                                            "Filter": "(date_part('month'::text, (pub_date)::timestamp without time zone) = '6'::double precision)",
+                                            "Scan Direction": "Forward",
+                                            "Node Type": "Index Scan",
+                                            "Relation Name": "inproceedings",
+                                            "Alias": "inproceedings_1",
+                                            "Parallel Aware": false,
+                                            "Parent Relationship": "Outer",
+                                            "Index Name": "inproceedings_conference"
+                                          }
+                                        ],
+                                        "Node Type": "Unique",
+                                        "Parallel Aware": false
+                                      }
+                                    ],
+                                    "Node Type": "Hash",
+                                    "Parallel Aware": false
+                                  }
+                                ],
+                                "Node Type": "Hash Join",
+                                "Join Type": "Inner",
+                                "Parallel Aware": false,
+                                "Parent Relationship": "Outer",
+                                "Hash Cond": "(inproceedings.booktitle = inproceedings_1.booktitle)"
+                              }
+                            ],
+                            "Sort Key": [
+                              "inproceedings.booktitle",
+                              "(date_part('year'::text, (inproceedings.pub_date)::timestamp without time zone))"
+                            ],
+                            "Node Type": "Sort",
+                            "Parallel Aware": false
+                          }
+                        ],
+                        "Node Type": "Aggregate",
+                        "Strategy": "Sorted",
+                        "Parallel Aware": false,
+                        "Group Key": [
+                          "inproceedings.booktitle",
+                          "(date_part('year'::text, (inproceedings.pub_date)::timestamp without time zone))"
+                        ],
+                        "Parent Relationship": "Outer"
+                      }
+                    ],
+                    "Node Type": "Gather Merge",
+                    "Parallel Aware": false
+                  }
+                ],
+                "Node Type": "Aggregate",
+                "Strategy": "Sorted",
+                "Filter": "(count(*) > 100)",
+                "Parallel Aware": false,
+                "Group Key": [
+                  "inproceedings.booktitle",
+                  "(date_part('year'::text, (inproceedings.pub_date)::timestamp without time zone))"
+                ],
+                "Parent Relationship": "Outer"
+              }
+            ],
+            "Node Type": "Aggregate",
+            "Strategy": "Hashed",
+            "Parallel Aware": false,
+            "Group Key": [
+              "count(*)",
+              "inproceedings.booktitle",
+              "(date_part('year'::text, (inproceedings.pub_date)::timestamp without time zone))"
+            ],
+            "Parent Relationship": "Outer"
+          }
+        ],
+        "Node Type": "Sort",
+        "Parallel Aware": false
+      }
+    }
+  ]

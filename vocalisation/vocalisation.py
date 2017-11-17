@@ -101,7 +101,7 @@ def main(filename):
 if __name__ == '__main__':
     if len(sys.argv) <= 1:
         print('Using hardcoded json file path..')
-        main('./examples/unique.json')
+        main('./examples/8.json')
     else:
         file_path = sys.argv[1]
         main(file_path)

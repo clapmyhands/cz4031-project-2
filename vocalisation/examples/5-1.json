@@ -1,0 +1,85 @@
+[
+  {
+    "Execution Time": 10209.551,
+    "Planning Time": 0.656,
+    "Plan": {
+      "Partial Mode": "Simple",
+      "Plans": [
+        {
+          "Plans": [
+            {
+              "Plans": [
+                {
+                  "Plans": [
+                    {
+                      "Plans": [
+                        {
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "proceedings",
+                          "Alias": "proceedings",
+                          "Parallel Aware": false,
+                          "Actual Rows": 34700,
+                          "Parent Relationship": "Member",
+                          "Actual Loops": 1
+                        },
+                        {
+                          "Node Type": "Seq Scan",
+                          "Relation Name": "inproceedings",
+                          "Alias": "inproceedings",
+                          "Parallel Aware": false,
+                          "Actual Rows": 2038302,
+                          "Parent Relationship": "Member",
+                          "Actual Loops": 1
+                        }
+                      ],
+                      "Node Type": "Append",
+                      "Parallel Aware": false,
+                      "Actual Rows": 2073002,
+                      "Parent Relationship": "Outer",
+                      "Actual Loops": 1
+                    }
+                  ],
+                  "Sort Space Type": "Disk",
+                  "Sort Key": [
+                    "proceedings.pub_id",
+                    "proceedings.pub_key",
+                    "proceedings.title",
+                    "proceedings.pub_date",
+                    "proceedings.booktitle"
+                  ],
+                  "Node Type": "Sort",
+                  "Sort Space Used": 253856,
+                  "Sort Method": "external merge",
+                  "Parallel Aware": false,
+                  "Actual Rows": 2073002,
+                  "Parent Relationship": "Outer",
+                  "Actual Loops": 1
+                }
+              ],
+              "Node Type": "Unique",
+              "Parallel Aware": false,
+              "Actual Rows": 2073002,
+              "Parent Relationship": "Subquery",
+              "Actual Loops": 1
+            }
+          ],
+          "Node Type": "Subquery Scan",
+          "Alias": "proceedings_inproceedings",
+          "Parallel Aware": false,
+          "Actual Rows": 2073002,
+          "Parent Relationship": "Outer",
+          "Actual Loops": 1
+        }
+      ],
+      "Node Type": "Aggregate",
+      "Strategy": "Hashed",
+      "Parallel Aware": false,
+      "Actual Rows": 60,
+      "Group Key": [
+        "date_part('year'::text, (proceedings_inproceedings.pub_date)::timestamp without time zone)"
+      ],
+      "Actual Loops": 1
+    },
+    "Triggers": []
+  }
+]

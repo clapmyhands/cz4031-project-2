@@ -1,0 +1,100 @@
+[
+  {
+    "Plan": {
+      "Partial Mode": "Finalize",
+      "Plans": [
+        {
+          "Workers Planned": 2,
+          "Parent Relationship": "Outer",
+          "Plans": [
+            {
+              "Partial Mode": "Partial",
+              "Plans": [
+                {
+                  "Parent Relationship": "Outer",
+                  "Plans": [
+                    {
+                      "Inner Unique": false,
+                      "Plans": [
+                        {
+                          "Relation Name": "authored",
+                          "Parent Relationship": "Outer",
+                          "Alias": "ad",
+                          "Node Type": "Seq Scan",
+                          "Parallel Aware": true
+                        },
+                        {
+                          "Parent Relationship": "Inner",
+                          "Plans": [
+                            {
+                              "Inner Unique": false,
+                              "Plans": [
+                                {
+                                  "Relation Name": "early_author",
+                                  "Parent Relationship": "Outer",
+                                  "Alias": "ea",
+                                  "Node Type": "Seq Scan",
+                                  "Parallel Aware": false
+                                },
+                                {
+                                  "Parent Relationship": "Inner",
+                                  "Plans": [
+                                    {
+                                      "Relation Name": "author",
+                                      "Parent Relationship": "Outer",
+                                      "Alias": "a",
+                                      "Node Type": "Seq Scan",
+                                      "Parallel Aware": false
+                                    }
+                                  ],
+                                  "Node Type": "Hash",
+                                  "Parallel Aware": false
+                                }
+                              ],
+                              "Node Type": "Hash Join",
+                              "Join Type": "Inner",
+                              "Parallel Aware": false,
+                              "Parent Relationship": "Outer",
+                              "Hash Cond": "(ea.author_name = a.author_name)"
+                            }
+                          ],
+                          "Node Type": "Hash",
+                          "Parallel Aware": false
+                        }
+                      ],
+                      "Node Type": "Hash Join",
+                      "Join Type": "Inner",
+                      "Parallel Aware": false,
+                      "Parent Relationship": "Outer",
+                      "Hash Cond": "(ad.author_id = a.author_id)"
+                    }
+                  ],
+                  "Sort Key": [
+                    "a.author_id"
+                  ],
+                  "Node Type": "Sort",
+                  "Parallel Aware": false
+                }
+              ],
+              "Node Type": "Aggregate",
+              "Strategy": "Sorted",
+              "Parallel Aware": false,
+              "Group Key": [
+                "a.author_id"
+              ],
+              "Parent Relationship": "Outer"
+            }
+          ],
+          "Node Type": "Gather Merge",
+          "Parallel Aware": false
+        }
+      ],
+      "Node Type": "Aggregate",
+      "Strategy": "Sorted",
+      "Parallel Aware": false,
+      "Group Key": [
+        "a.author_id"
+      ]
+    }
+  }
+]

@@ -1,0 +1,1414 @@
+[
+    {
+      "Plan": {
+        "Sort Key": [
+          "a.author_name"
+        ],
+        "Plans": [
+          {
+            "Partial Mode": "Simple",
+            "Plans": [
+              {
+                "Parent Relationship": "Outer",
+                "Plans": [
+                  {
+                    "Partial Mode": "Simple",
+                    "Plans": [
+                      {
+                        "Parent Relationship": "Outer",
+                        "Plans": [
+                          {
+                            "Inner Unique": false,
+                            "Plans": [
+                              {
+                                "Inner Unique": false,
+                                "Plans": [
+                                  {
+                                    "Parent Relationship": "Outer",
+                                    "Plans": [
+                                      {
+                                        "Parent Relationship": "Outer",
+                                        "Alias": "cjp_2",
+                                        "Plans": [
+                                          {
+                                            "Partial Mode": "Simple",
+                                            "Plans": [
+                                              {
+                                                "Parent Relationship": "Outer",
+                                                "Plans": [
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Alias": "proceedings_inproceedings_2",
+                                                    "Plans": [
+                                                      {
+                                                        "Partial Mode": "Simple",
+                                                        "Plans": [
+                                                          {
+                                                            "Parent Relationship": "Outer",
+                                                            "Plans": [
+                                                              {
+                                                                "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                                "Node Type": "Seq Scan",
+                                                                "Relation Name": "proceedings",
+                                                                "Alias": "proceedings_2",
+                                                                "Parallel Aware": false,
+                                                                "Parent Relationship": "Member"
+                                                              },
+                                                              {
+                                                                "Plans": [
+                                                                  {
+                                                                    "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                                    "Node Type": "Seq Scan",
+                                                                    "Relation Name": "inproceedings",
+                                                                    "Alias": "inproceedings_2",
+                                                                    "Parallel Aware": true,
+                                                                    "Parent Relationship": "Outer"
+                                                                  }
+                                                                ],
+                                                                "Workers Planned": 2,
+                                                                "Node Type": "Gather",
+                                                                "Parallel Aware": false,
+                                                                "Single Copy": false,
+                                                                "Parent Relationship": "Member"
+                                                              }
+                                                            ],
+                                                            "Node Type": "Append",
+                                                            "Parallel Aware": false
+                                                          }
+                                                        ],
+                                                        "Node Type": "Aggregate",
+                                                        "Strategy": "Hashed",
+                                                        "Parallel Aware": false,
+                                                        "Group Key": [
+                                                          "proceedings_2.pub_id",
+                                                          "proceedings_2.pub_key",
+                                                          "proceedings_2.title",
+                                                          "proceedings_2.pub_date",
+                                                          "proceedings_2.booktitle"
+                                                        ],
+                                                        "Parent Relationship": "Subquery"
+                                                      }
+                                                    ],
+                                                    "Node Type": "Subquery Scan",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Plans": [
+                                                      {
+                                                        "Filter": "(journal ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                        "Node Type": "Seq Scan",
+                                                        "Relation Name": "article",
+                                                        "Alias": "article_2",
+                                                        "Parallel Aware": true,
+                                                        "Parent Relationship": "Outer"
+                                                      }
+                                                    ],
+                                                    "Workers Planned": 2,
+                                                    "Node Type": "Gather",
+                                                    "Parallel Aware": false,
+                                                    "Single Copy": false,
+                                                    "Parent Relationship": "Member"
+                                                  }
+                                                ],
+                                                "Node Type": "Append",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Node Type": "Aggregate",
+                                            "Strategy": "Hashed",
+                                            "Parallel Aware": false,
+                                            "Group Key": [
+                                              "proceedings_inproceedings_2.pub_id",
+                                              "proceedings_inproceedings_2.title",
+                                              "proceedings_inproceedings_2.pub_date",
+                                              "proceedings_inproceedings_2.booktitle"
+                                            ],
+                                            "Parent Relationship": "Subquery"
+                                          }
+                                        ],
+                                        "Node Type": "Subquery Scan",
+                                        "Parallel Aware": false
+                                      }
+                                    ],
+                                    "Sort Key": [
+                                      "cjp_2.pub_id"
+                                    ],
+                                    "Node Type": "Sort",
+                                    "Parallel Aware": false
+                                  },
+                                  {
+                                    "Parent Relationship": "Inner",
+                                    "Plans": [
+                                      {
+                                        "Parent Relationship": "Outer",
+                                        "Alias": "cjp_3",
+                                        "Plans": [
+                                          {
+                                            "Partial Mode": "Simple",
+                                            "Plans": [
+                                              {
+                                                "Parent Relationship": "Outer",
+                                                "Plans": [
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Alias": "proceedings_inproceedings_3",
+                                                    "Plans": [
+                                                      {
+                                                        "Partial Mode": "Simple",
+                                                        "Plans": [
+                                                          {
+                                                            "Parent Relationship": "Outer",
+                                                            "Plans": [
+                                                              {
+                                                                "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                                "Node Type": "Seq Scan",
+                                                                "Relation Name": "proceedings",
+                                                                "Alias": "proceedings_3",
+                                                                "Parallel Aware": false,
+                                                                "Parent Relationship": "Member"
+                                                              },
+                                                              {
+                                                                "Plans": [
+                                                                  {
+                                                                    "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                                    "Node Type": "Seq Scan",
+                                                                    "Relation Name": "inproceedings",
+                                                                    "Alias": "inproceedings_3",
+                                                                    "Parallel Aware": true,
+                                                                    "Parent Relationship": "Outer"
+                                                                  }
+                                                                ],
+                                                                "Workers Planned": 2,
+                                                                "Node Type": "Gather",
+                                                                "Parallel Aware": false,
+                                                                "Single Copy": false,
+                                                                "Parent Relationship": "Member"
+                                                              }
+                                                            ],
+                                                            "Node Type": "Append",
+                                                            "Parallel Aware": false
+                                                          }
+                                                        ],
+                                                        "Node Type": "Aggregate",
+                                                        "Strategy": "Hashed",
+                                                        "Parallel Aware": false,
+                                                        "Group Key": [
+                                                          "proceedings_3.pub_id",
+                                                          "proceedings_3.pub_key",
+                                                          "proceedings_3.title",
+                                                          "proceedings_3.pub_date",
+                                                          "proceedings_3.booktitle"
+                                                        ],
+                                                        "Parent Relationship": "Subquery"
+                                                      }
+                                                    ],
+                                                    "Node Type": "Subquery Scan",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Plans": [
+                                                      {
+                                                        "Filter": "(journal ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                        "Node Type": "Seq Scan",
+                                                        "Relation Name": "article",
+                                                        "Alias": "article_3",
+                                                        "Parallel Aware": true,
+                                                        "Parent Relationship": "Outer"
+                                                      }
+                                                    ],
+                                                    "Workers Planned": 2,
+                                                    "Node Type": "Gather",
+                                                    "Parallel Aware": false,
+                                                    "Single Copy": false,
+                                                    "Parent Relationship": "Member"
+                                                  }
+                                                ],
+                                                "Node Type": "Append",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Node Type": "Aggregate",
+                                            "Strategy": "Hashed",
+                                            "Parallel Aware": false,
+                                            "Group Key": [
+                                              "proceedings_inproceedings_3.pub_id",
+                                              "proceedings_inproceedings_3.title",
+                                              "proceedings_inproceedings_3.pub_date",
+                                              "proceedings_inproceedings_3.booktitle"
+                                            ],
+                                            "Parent Relationship": "Subquery"
+                                          }
+                                        ],
+                                        "Node Type": "Subquery Scan",
+                                        "Parallel Aware": false
+                                      }
+                                    ],
+                                    "Sort Key": [
+                                      "cjp_3.pub_id"
+                                    ],
+                                    "Node Type": "Sort",
+                                    "Parallel Aware": false
+                                  }
+                                ],
+                                "Node Type": "Merge Join",
+                                "Join Type": "Inner",
+                                "Parallel Aware": false,
+                                "Parent Relationship": "Outer",
+                                "Merge Cond": "(cjp_2.pub_id = cjp_3.pub_id)"
+                              },
+                              {
+                                "Parent Relationship": "Inner",
+                                "Plans": [
+                                  {
+                                    "Inner Unique": false,
+                                    "Plans": [
+                                      {
+                                        "Inner Unique": false,
+                                        "Plans": [
+                                          {
+                                            "Parent Relationship": "Outer",
+                                            "Plans": [
+                                              {
+                                                "Scan Direction": "Forward",
+                                                "Node Type": "Index Only Scan",
+                                                "Relation Name": "publication",
+                                                "Alias": "pb_16",
+                                                "Parallel Aware": false,
+                                                "Parent Relationship": "Member",
+                                                "Index Name": "publication_pkey"
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "article",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_17",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_17.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "book",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_18",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_18.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "incollection",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_19",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_19.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "inproceedings",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_20",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_20.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "masters_thesis",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_21",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_21.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "phd_thesis",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_22",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_22.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "proceedings",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_23",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_23.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_16.pub_id"
+                                            ],
+                                            "Node Type": "Merge Append",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Inner",
+                                            "Plans": [
+                                              {
+                                                "Parent Relationship": "Outer",
+                                                "Plans": [
+                                                  {
+                                                    "Inner Unique": true,
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "authored",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "aed_2",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      },
+                                                      {
+                                                        "Parent Relationship": "Inner",
+                                                        "Plans": [
+                                                          {
+                                                            "Relation Name": "author",
+                                                            "Parent Relationship": "Outer",
+                                                            "Alias": "a_2",
+                                                            "Node Type": "Seq Scan",
+                                                            "Parallel Aware": false
+                                                          }
+                                                        ],
+                                                        "Node Type": "Hash",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Node Type": "Hash Join",
+                                                    "Join Type": "Inner",
+                                                    "Parallel Aware": false,
+                                                    "Parent Relationship": "Outer",
+                                                    "Hash Cond": "(aed_2.author_id = a_2.author_id)"
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "aed_2.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Node Type": "Materialize",
+                                            "Parallel Aware": false
+                                          }
+                                        ],
+                                        "Node Type": "Merge Join",
+                                        "Join Type": "Inner",
+                                        "Parallel Aware": false,
+                                        "Parent Relationship": "Outer",
+                                        "Merge Cond": "(pb_16.pub_id = aed_2.pub_id)"
+                                      },
+                                      {
+                                        "Parent Relationship": "Inner",
+                                        "Plans": [
+                                          {
+                                            "Inner Unique": false,
+                                            "Plans": [
+                                              {
+                                                "Parent Relationship": "Outer",
+                                                "Plans": [
+                                                  {
+                                                    "Scan Direction": "Forward",
+                                                    "Node Type": "Index Only Scan",
+                                                    "Relation Name": "publication",
+                                                    "Alias": "pb_24",
+                                                    "Parallel Aware": false,
+                                                    "Parent Relationship": "Member",
+                                                    "Index Name": "publication_pkey"
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "article",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "pb_25",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "pb_25.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "book",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "pb_26",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "pb_26.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "incollection",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "pb_27",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "pb_27.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "inproceedings",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "pb_28",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "pb_28.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "masters_thesis",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "pb_29",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "pb_29.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "phd_thesis",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "pb_30",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "pb_30.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Member",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "proceedings",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "pb_31",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "pb_31.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_24.pub_id"
+                                                ],
+                                                "Node Type": "Merge Append",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Inner",
+                                                "Plans": [
+                                                  {
+                                                    "Parent Relationship": "Outer",
+                                                    "Plans": [
+                                                      {
+                                                        "Inner Unique": true,
+                                                        "Plans": [
+                                                          {
+                                                            "Relation Name": "authored",
+                                                            "Parent Relationship": "Outer",
+                                                            "Alias": "aed_3",
+                                                            "Node Type": "Seq Scan",
+                                                            "Parallel Aware": false
+                                                          },
+                                                          {
+                                                            "Parent Relationship": "Inner",
+                                                            "Plans": [
+                                                              {
+                                                                "Relation Name": "author",
+                                                                "Parent Relationship": "Outer",
+                                                                "Alias": "a_3",
+                                                                "Node Type": "Seq Scan",
+                                                                "Parallel Aware": false
+                                                              }
+                                                            ],
+                                                            "Node Type": "Hash",
+                                                            "Parallel Aware": false
+                                                          }
+                                                        ],
+                                                        "Node Type": "Hash Join",
+                                                        "Join Type": "Inner",
+                                                        "Parallel Aware": false,
+                                                        "Parent Relationship": "Outer",
+                                                        "Hash Cond": "(aed_3.author_id = a_3.author_id)"
+                                                      }
+                                                    ],
+                                                    "Sort Key": [
+                                                      "aed_3.pub_id"
+                                                    ],
+                                                    "Node Type": "Sort",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Node Type": "Materialize",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Node Type": "Merge Join",
+                                            "Join Type": "Inner",
+                                            "Parallel Aware": false,
+                                            "Parent Relationship": "Outer",
+                                            "Merge Cond": "(pb_24.pub_id = aed_3.pub_id)"
+                                          }
+                                        ],
+                                        "Node Type": "Materialize",
+                                        "Parallel Aware": false
+                                      }
+                                    ],
+                                    "Node Type": "Merge Join",
+                                    "Join Type": "Inner",
+                                    "Parallel Aware": false,
+                                    "Parent Relationship": "Outer",
+                                    "Join Filter": "(a_2.author_name <> a_3.author_name)",
+                                    "Merge Cond": "(pb_16.pub_id = pb_24.pub_id)"
+                                  }
+                                ],
+                                "Node Type": "Materialize",
+                                "Parallel Aware": false
+                              }
+                            ],
+                            "Node Type": "Merge Join",
+                            "Join Type": "Inner",
+                            "Parallel Aware": false,
+                            "Parent Relationship": "Outer",
+                            "Merge Cond": "(cjp_2.pub_id = pb_16.pub_id)"
+                          }
+                        ],
+                        "Sort Key": [
+                          "a_2.author_name"
+                        ],
+                        "Node Type": "Sort",
+                        "Parallel Aware": false
+                      }
+                    ],
+                    "Node Type": "Aggregate",
+                    "Strategy": "Sorted",
+                    "Parallel Aware": false,
+                    "Group Key": [
+                      "a_2.author_name"
+                    ],
+                    "Parent Relationship": "Outer"
+                  }
+                ],
+                "Sort Key": [
+                  "(count(DISTINCT a_3.author_name)) DESC"
+                ],
+                "Node Type": "Sort",
+                "Parallel Aware": false
+              }
+            ],
+            "Node Type": "Aggregate",
+            "Strategy": "Plain",
+            "Parallel Aware": false,
+            "Parent Relationship": "InitPlan",
+            "Subplan Name": "InitPlan 1 (returns $4)"
+          },
+          {
+            "Parent Relationship": "Outer",
+            "Plans": [
+              {
+                "Partial Mode": "Simple",
+                "Plans": [
+                  {
+                    "Parent Relationship": "Outer",
+                    "Plans": [
+                      {
+                        "Inner Unique": false,
+                        "Plans": [
+                          {
+                            "Inner Unique": false,
+                            "Plans": [
+                              {
+                                "Parent Relationship": "Outer",
+                                "Plans": [
+                                  {
+                                    "Parent Relationship": "Outer",
+                                    "Alias": "cjp",
+                                    "Plans": [
+                                      {
+                                        "Partial Mode": "Simple",
+                                        "Plans": [
+                                          {
+                                            "Parent Relationship": "Outer",
+                                            "Plans": [
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Alias": "proceedings_inproceedings",
+                                                "Plans": [
+                                                  {
+                                                    "Partial Mode": "Simple",
+                                                    "Plans": [
+                                                      {
+                                                        "Parent Relationship": "Outer",
+                                                        "Plans": [
+                                                          {
+                                                            "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                            "Node Type": "Seq Scan",
+                                                            "Relation Name": "proceedings",
+                                                            "Alias": "proceedings",
+                                                            "Parallel Aware": false,
+                                                            "Parent Relationship": "Member"
+                                                          },
+                                                          {
+                                                            "Plans": [
+                                                              {
+                                                                "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                                "Node Type": "Seq Scan",
+                                                                "Relation Name": "inproceedings",
+                                                                "Alias": "inproceedings",
+                                                                "Parallel Aware": true,
+                                                                "Parent Relationship": "Outer"
+                                                              }
+                                                            ],
+                                                            "Workers Planned": 2,
+                                                            "Node Type": "Gather",
+                                                            "Parallel Aware": false,
+                                                            "Single Copy": false,
+                                                            "Parent Relationship": "Member"
+                                                          }
+                                                        ],
+                                                        "Node Type": "Append",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Node Type": "Aggregate",
+                                                    "Strategy": "Hashed",
+                                                    "Parallel Aware": false,
+                                                    "Group Key": [
+                                                      "proceedings.pub_id",
+                                                      "proceedings.pub_key",
+                                                      "proceedings.title",
+                                                      "proceedings.pub_date",
+                                                      "proceedings.booktitle"
+                                                    ],
+                                                    "Parent Relationship": "Subquery"
+                                                  }
+                                                ],
+                                                "Node Type": "Subquery Scan",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Plans": [
+                                                  {
+                                                    "Filter": "(journal ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                    "Node Type": "Seq Scan",
+                                                    "Relation Name": "article",
+                                                    "Alias": "article",
+                                                    "Parallel Aware": true,
+                                                    "Parent Relationship": "Outer"
+                                                  }
+                                                ],
+                                                "Workers Planned": 2,
+                                                "Node Type": "Gather",
+                                                "Parallel Aware": false,
+                                                "Single Copy": false,
+                                                "Parent Relationship": "Member"
+                                              }
+                                            ],
+                                            "Node Type": "Append",
+                                            "Parallel Aware": false
+                                          }
+                                        ],
+                                        "Node Type": "Aggregate",
+                                        "Strategy": "Hashed",
+                                        "Parallel Aware": false,
+                                        "Group Key": [
+                                          "proceedings_inproceedings.pub_id",
+                                          "proceedings_inproceedings.title",
+                                          "proceedings_inproceedings.pub_date",
+                                          "proceedings_inproceedings.booktitle"
+                                        ],
+                                        "Parent Relationship": "Subquery"
+                                      }
+                                    ],
+                                    "Node Type": "Subquery Scan",
+                                    "Parallel Aware": false
+                                  }
+                                ],
+                                "Sort Key": [
+                                  "cjp.pub_id"
+                                ],
+                                "Node Type": "Sort",
+                                "Parallel Aware": false
+                              },
+                              {
+                                "Parent Relationship": "Inner",
+                                "Plans": [
+                                  {
+                                    "Parent Relationship": "Outer",
+                                    "Alias": "cjp_1",
+                                    "Plans": [
+                                      {
+                                        "Partial Mode": "Simple",
+                                        "Plans": [
+                                          {
+                                            "Parent Relationship": "Outer",
+                                            "Plans": [
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Alias": "proceedings_inproceedings_1",
+                                                "Plans": [
+                                                  {
+                                                    "Partial Mode": "Simple",
+                                                    "Plans": [
+                                                      {
+                                                        "Parent Relationship": "Outer",
+                                                        "Plans": [
+                                                          {
+                                                            "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                            "Node Type": "Seq Scan",
+                                                            "Relation Name": "proceedings",
+                                                            "Alias": "proceedings_1",
+                                                            "Parallel Aware": false,
+                                                            "Parent Relationship": "Member"
+                                                          },
+                                                          {
+                                                            "Plans": [
+                                                              {
+                                                                "Filter": "(booktitle ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                                "Node Type": "Seq Scan",
+                                                                "Relation Name": "inproceedings",
+                                                                "Alias": "inproceedings_1",
+                                                                "Parallel Aware": true,
+                                                                "Parent Relationship": "Outer"
+                                                              }
+                                                            ],
+                                                            "Workers Planned": 2,
+                                                            "Node Type": "Gather",
+                                                            "Parallel Aware": false,
+                                                            "Single Copy": false,
+                                                            "Parent Relationship": "Member"
+                                                          }
+                                                        ],
+                                                        "Node Type": "Append",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Node Type": "Aggregate",
+                                                    "Strategy": "Hashed",
+                                                    "Parallel Aware": false,
+                                                    "Group Key": [
+                                                      "proceedings_1.pub_id",
+                                                      "proceedings_1.pub_key",
+                                                      "proceedings_1.title",
+                                                      "proceedings_1.pub_date",
+                                                      "proceedings_1.booktitle"
+                                                    ],
+                                                    "Parent Relationship": "Subquery"
+                                                  }
+                                                ],
+                                                "Node Type": "Subquery Scan",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Plans": [
+                                                  {
+                                                    "Filter": "(journal ~ '^(?:.*[dD]ata.*)$'::text)",
+                                                    "Node Type": "Seq Scan",
+                                                    "Relation Name": "article",
+                                                    "Alias": "article_1",
+                                                    "Parallel Aware": true,
+                                                    "Parent Relationship": "Outer"
+                                                  }
+                                                ],
+                                                "Workers Planned": 2,
+                                                "Node Type": "Gather",
+                                                "Parallel Aware": false,
+                                                "Single Copy": false,
+                                                "Parent Relationship": "Member"
+                                              }
+                                            ],
+                                            "Node Type": "Append",
+                                            "Parallel Aware": false
+                                          }
+                                        ],
+                                        "Node Type": "Aggregate",
+                                        "Strategy": "Hashed",
+                                        "Parallel Aware": false,
+                                        "Group Key": [
+                                          "proceedings_inproceedings_1.pub_id",
+                                          "proceedings_inproceedings_1.title",
+                                          "proceedings_inproceedings_1.pub_date",
+                                          "proceedings_inproceedings_1.booktitle"
+                                        ],
+                                        "Parent Relationship": "Subquery"
+                                      }
+                                    ],
+                                    "Node Type": "Subquery Scan",
+                                    "Parallel Aware": false
+                                  }
+                                ],
+                                "Sort Key": [
+                                  "cjp_1.pub_id"
+                                ],
+                                "Node Type": "Sort",
+                                "Parallel Aware": false
+                              }
+                            ],
+                            "Node Type": "Merge Join",
+                            "Join Type": "Inner",
+                            "Parallel Aware": false,
+                            "Parent Relationship": "Outer",
+                            "Merge Cond": "(cjp.pub_id = cjp_1.pub_id)"
+                          },
+                          {
+                            "Parent Relationship": "Inner",
+                            "Plans": [
+                              {
+                                "Inner Unique": false,
+                                "Plans": [
+                                  {
+                                    "Inner Unique": false,
+                                    "Plans": [
+                                      {
+                                        "Parent Relationship": "Outer",
+                                        "Plans": [
+                                          {
+                                            "Scan Direction": "Forward",
+                                            "Node Type": "Index Only Scan",
+                                            "Relation Name": "publication",
+                                            "Alias": "pb",
+                                            "Parallel Aware": false,
+                                            "Parent Relationship": "Member",
+                                            "Index Name": "publication_pkey"
+                                          },
+                                          {
+                                            "Parent Relationship": "Member",
+                                            "Plans": [
+                                              {
+                                                "Relation Name": "article",
+                                                "Parent Relationship": "Outer",
+                                                "Alias": "pb_1",
+                                                "Node Type": "Seq Scan",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_1.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Member",
+                                            "Plans": [
+                                              {
+                                                "Relation Name": "book",
+                                                "Parent Relationship": "Outer",
+                                                "Alias": "pb_2",
+                                                "Node Type": "Seq Scan",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_2.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Member",
+                                            "Plans": [
+                                              {
+                                                "Relation Name": "incollection",
+                                                "Parent Relationship": "Outer",
+                                                "Alias": "pb_3",
+                                                "Node Type": "Seq Scan",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_3.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Member",
+                                            "Plans": [
+                                              {
+                                                "Relation Name": "inproceedings",
+                                                "Parent Relationship": "Outer",
+                                                "Alias": "pb_4",
+                                                "Node Type": "Seq Scan",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_4.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Member",
+                                            "Plans": [
+                                              {
+                                                "Relation Name": "masters_thesis",
+                                                "Parent Relationship": "Outer",
+                                                "Alias": "pb_5",
+                                                "Node Type": "Seq Scan",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_5.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Member",
+                                            "Plans": [
+                                              {
+                                                "Relation Name": "phd_thesis",
+                                                "Parent Relationship": "Outer",
+                                                "Alias": "pb_6",
+                                                "Node Type": "Seq Scan",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_6.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Member",
+                                            "Plans": [
+                                              {
+                                                "Relation Name": "proceedings",
+                                                "Parent Relationship": "Outer",
+                                                "Alias": "pb_7",
+                                                "Node Type": "Seq Scan",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_7.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          }
+                                        ],
+                                        "Sort Key": [
+                                          "pb.pub_id"
+                                        ],
+                                        "Node Type": "Merge Append",
+                                        "Parallel Aware": false
+                                      },
+                                      {
+                                        "Parent Relationship": "Inner",
+                                        "Plans": [
+                                          {
+                                            "Parent Relationship": "Outer",
+                                            "Plans": [
+                                              {
+                                                "Inner Unique": true,
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "authored",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "aed",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  },
+                                                  {
+                                                    "Parent Relationship": "Inner",
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "author",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "a",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Node Type": "Hash",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Node Type": "Hash Join",
+                                                "Join Type": "Inner",
+                                                "Parallel Aware": false,
+                                                "Parent Relationship": "Outer",
+                                                "Hash Cond": "(aed.author_id = a.author_id)"
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "aed.pub_id"
+                                            ],
+                                            "Node Type": "Sort",
+                                            "Parallel Aware": false
+                                          }
+                                        ],
+                                        "Node Type": "Materialize",
+                                        "Parallel Aware": false
+                                      }
+                                    ],
+                                    "Node Type": "Merge Join",
+                                    "Join Type": "Inner",
+                                    "Parallel Aware": false,
+                                    "Parent Relationship": "Outer",
+                                    "Merge Cond": "(pb.pub_id = aed.pub_id)"
+                                  },
+                                  {
+                                    "Parent Relationship": "Inner",
+                                    "Plans": [
+                                      {
+                                        "Inner Unique": false,
+                                        "Plans": [
+                                          {
+                                            "Parent Relationship": "Outer",
+                                            "Plans": [
+                                              {
+                                                "Scan Direction": "Forward",
+                                                "Node Type": "Index Only Scan",
+                                                "Relation Name": "publication",
+                                                "Alias": "pb_8",
+                                                "Parallel Aware": false,
+                                                "Parent Relationship": "Member",
+                                                "Index Name": "publication_pkey"
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "article",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_9",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_9.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "book",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_10",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_10.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "incollection",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_11",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_11.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "inproceedings",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_12",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_12.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "masters_thesis",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_13",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_13.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "phd_thesis",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_14",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_14.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              },
+                                              {
+                                                "Parent Relationship": "Member",
+                                                "Plans": [
+                                                  {
+                                                    "Relation Name": "proceedings",
+                                                    "Parent Relationship": "Outer",
+                                                    "Alias": "pb_15",
+                                                    "Node Type": "Seq Scan",
+                                                    "Parallel Aware": false
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "pb_15.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Sort Key": [
+                                              "pb_8.pub_id"
+                                            ],
+                                            "Node Type": "Merge Append",
+                                            "Parallel Aware": false
+                                          },
+                                          {
+                                            "Parent Relationship": "Inner",
+                                            "Plans": [
+                                              {
+                                                "Parent Relationship": "Outer",
+                                                "Plans": [
+                                                  {
+                                                    "Inner Unique": true,
+                                                    "Plans": [
+                                                      {
+                                                        "Relation Name": "authored",
+                                                        "Parent Relationship": "Outer",
+                                                        "Alias": "aed_1",
+                                                        "Node Type": "Seq Scan",
+                                                        "Parallel Aware": false
+                                                      },
+                                                      {
+                                                        "Parent Relationship": "Inner",
+                                                        "Plans": [
+                                                          {
+                                                            "Relation Name": "author",
+                                                            "Parent Relationship": "Outer",
+                                                            "Alias": "a_1",
+                                                            "Node Type": "Seq Scan",
+                                                            "Parallel Aware": false
+                                                          }
+                                                        ],
+                                                        "Node Type": "Hash",
+                                                        "Parallel Aware": false
+                                                      }
+                                                    ],
+                                                    "Node Type": "Hash Join",
+                                                    "Join Type": "Inner",
+                                                    "Parallel Aware": false,
+                                                    "Parent Relationship": "Outer",
+                                                    "Hash Cond": "(aed_1.author_id = a_1.author_id)"
+                                                  }
+                                                ],
+                                                "Sort Key": [
+                                                  "aed_1.pub_id"
+                                                ],
+                                                "Node Type": "Sort",
+                                                "Parallel Aware": false
+                                              }
+                                            ],
+                                            "Node Type": "Materialize",
+                                            "Parallel Aware": false
+                                          }
+                                        ],
+                                        "Node Type": "Merge Join",
+                                        "Join Type": "Inner",
+                                        "Parallel Aware": false,
+                                        "Parent Relationship": "Outer",
+                                        "Merge Cond": "(pb_8.pub_id = aed_1.pub_id)"
+                                      }
+                                    ],
+                                    "Node Type": "Materialize",
+                                    "Parallel Aware": false
+                                  }
+                                ],
+                                "Node Type": "Merge Join",
+                                "Join Type": "Inner",
+                                "Parallel Aware": false,
+                                "Parent Relationship": "Outer",
+                                "Join Filter": "(a.author_name <> a_1.author_name)",
+                                "Merge Cond": "(pb.pub_id = pb_8.pub_id)"
+                              }
+                            ],
+                            "Node Type": "Materialize",
+                            "Parallel Aware": false
+                          }
+                        ],
+                        "Node Type": "Merge Join",
+                        "Join Type": "Inner",
+                        "Parallel Aware": false,
+                        "Parent Relationship": "Outer",
+                        "Merge Cond": "(cjp.pub_id = pb.pub_id)"
+                      }
+                    ],
+                    "Sort Key": [
+                      "a.author_name"
+                    ],
+                    "Node Type": "Sort",
+                    "Parallel Aware": false
+                  }
+                ],
+                "Node Type": "Aggregate",
+                "Strategy": "Sorted",
+                "Filter": "(count(DISTINCT a_1.author_name) = $4)",
+                "Parallel Aware": false,
+                "Group Key": [
+                  "a.author_name"
+                ],
+                "Parent Relationship": "Outer"
+              }
+            ],
+            "Sort Key": [
+              "(count(DISTINCT a_1.author_name)) DESC"
+            ],
+            "Node Type": "Sort",
+            "Parallel Aware": false
+          }
+        ],
+        "Node Type": "Sort",
+        "Parallel Aware": false
+      }
+    }
+  ]
