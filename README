@@ -1,3 +1,48 @@
+README for CZ4031
+
+Requirements:
+1. Windows
+2. Python 2.7
+3. Node js runtime
+4. Yarn package manager
+5. SAPI 5 (Windows)
+
+There are 2 types of program: CLI and GUI. In CLI way, the user need to provide JSON file containing query plan. In GUI, the user 
+can use extended version pgAdmin 4 that can transform query into text.
+
+To execute the CLI way, we need to run:
+'''
+pip install -r requirements.txt
+python vocalisation/vocalisation.py "path to json"
+'''
+For the GUI, we use pgAdmin 4 as website. The client is javascript based and the backend is python based (Flask Framework).
+It is recommended that the python server and the GUI run in the same computer since TTS program is implemented in python server.
+
+To run the GUI:
+1. install python packages requirements by command 
+'''
+pip install -r requirements.txt 
+'''
+at project root.
+2. Go to folder web, and run command
+'''
+yarn
+'''
+to install javascript library
+'''
+3. Build javascript client by command
+'''
+yarn install bundle:dev
+'''
+It generate minified client code.
+4. Create config_local.py inside web folder. The file tells about server configuration and where to save the configuration. The file is already prepared.
+5. Run inside web folder
+'''
+python pgAdmin4.py
+'''
+To run the server at 127.0.0.1:5050. Go to the address for running GUI.
+
+Below is official readme from pgAdmin
 pgAdmin 4
 =========
 

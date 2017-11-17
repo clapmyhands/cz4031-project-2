@@ -1,0 +1,84 @@
+{
+	"Plan": {
+		"Partial Mode": "Finalize",
+		"Plans": [{
+			"Workers Planned": 2,
+			"Parent Relationship": "Outer",
+			"Plans": [{
+				"Partial Mode": "Partial",
+				"Plans": [{
+					"Parent Relationship": "Outer",
+					"Plans": [{
+						"Parent Relationship": "Outer",
+						"Plans": [{
+							"Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2000'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+							"Node Type": "Seq Scan",
+							"Relation Name": "book",
+							"Alias": "book",
+							"Parallel Aware": true,
+							"Parent Relationship": "Member"
+						}, {
+							"Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2000'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+							"Node Type": "Seq Scan",
+							"Relation Name": "incollection",
+							"Alias": "incollection",
+							"Parallel Aware": true,
+							"Parent Relationship": "Member"
+						}, {
+							"Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2000'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+							"Node Type": "Seq Scan",
+							"Relation Name": "masters_thesis",
+							"Alias": "masters_thesis",
+							"Parallel Aware": true,
+							"Parent Relationship": "Member"
+						}, {
+							"Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2000'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+							"Node Type": "Seq Scan",
+							"Relation Name": "phd_thesis",
+							"Alias": "phd_thesis",
+							"Parallel Aware": true,
+							"Parent Relationship": "Member"
+						}, {
+							"Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2000'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+							"Node Type": "Seq Scan",
+							"Relation Name": "proceedings",
+							"Alias": "proceedings",
+							"Parallel Aware": true,
+							"Parent Relationship": "Member"
+						}, {
+							"Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2000'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+							"Node Type": "Seq Scan",
+							"Relation Name": "inproceedings",
+							"Alias": "inproceedings",
+							"Parallel Aware": true,
+							"Parent Relationship": "Member"
+						}, {
+							"Filter": "((date_part('year'::text, (pub_date)::timestamp without time zone) >= '2000'::double precision) AND (date_part('year'::text, (pub_date)::timestamp without time zone) <= '2017'::double precision))",
+							"Node Type": "Seq Scan",
+							"Relation Name": "article",
+							"Alias": "article",
+							"Parallel Aware": true,
+							"Parent Relationship": "Member"
+						}],
+						"Node Type": "Append",
+						"Parallel Aware": false
+					}],
+					"Sort Key": ["('book'::text)"],
+					"Node Type": "Sort",
+					"Parallel Aware": false
+				}],
+				"Node Type": "Aggregate",
+				"Strategy": "Sorted",
+				"Parallel Aware": false,
+				"Group Key": ["('book'::text)"],
+				"Parent Relationship": "Outer"
+			}],
+			"Node Type": "Gather Merge",
+			"Parallel Aware": false
+		}],
+		"Node Type": "Aggregate",
+		"Strategy": "Sorted",
+		"Parallel Aware": false,
+		"Group Key": ["('book'::text)"]
+	}
+}

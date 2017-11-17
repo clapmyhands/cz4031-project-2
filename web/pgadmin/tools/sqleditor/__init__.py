@@ -29,6 +29,11 @@ from pgadmin.utils.menu import MenuItem
 
 from config import PG_DEFAULT_DRIVER, ON_DEMAND_RECORD_COUNT
 
+#Custom feature extention
+from ..vocalisation.vocalisation import process_node
+import pyttsx3
+import thread
+
 MODULE_NAME = 'sqleditor'
 
 # import unquote from urllib for python2.x and python3.x
@@ -50,6 +55,7 @@ TX_STATUS__ACTIVE = 1
 TX_STATUS_INTRANS = 2
 TX_STATUS_INERROR = 3
 
+engine = pyttsx3.init()
 
 class SqlEditorModule(PgAdminModule):
     """
@@ -107,7 +113,8 @@ class SqlEditorModule(PgAdminModule):
             'sqleditor.autocomplete',
             'sqleditor.load_file',
             'sqleditor.save_file',
-            'sqleditor.query_tool_download'
+            'sqleditor.query_tool_download',
+            'sqleditor.qep_tts'
         ]
 
     def register_preferences(self):
@@ -384,13 +391,28 @@ def start_query_tool(trans_id):
     Args:
         trans_id: unique transaction id
     """
-
+    tts = False
     if request.data:
+        print(request.data)
         sql = json.loads(request.data, encoding='utf-8')
+        '''
+        data_pkg = json.loads(request.data, encoding='utf-8')
+        print("Data JSON")
+        print(data_pkg)
+        sql = data_pkg["sql"]
+        tts = data_pkg["tts"]
+        print("SQL extracted")
+        print(sql)
+        print("TTS extracted")
+        print(tts)
+        '''
     else:
         sql = request.args or request.form
 
     grid_data = session['gridData']
+    
+    print("grid data")
+    print(grid_data)
 
     # Return from the function if transaction id not found
     if str(trans_id) not in grid_data:
@@ -400,7 +422,8 @@ def start_query_tool(trans_id):
                 'can_edit': False, 'can_filter': False
             }
         )
-
+    print("trans_id")
+    print(trans_id)
     # Fetch the object for the specified transaction id.
     # Use pickle.loads function to get the command object
     session_obj = grid_data[str(trans_id)]
@@ -453,8 +476,14 @@ def start_query_tool(trans_id):
 
             # Execute sql asynchronously with params is None
             # and formatted_error is True.
+            print("Executing")
+            print(sql)
             status, result = conn.execute_async(sql)
-
+            print("status")
+            print(status)
+            print("result")
+            print(result)
+            
             # If the transaction aborted for some reason and
             # Auto RollBack is True then issue a rollback to cleanup.
             trans_status = conn.transaction_status()
@@ -536,11 +565,30 @@ def preferences(trans_id):
 
         return success_return()
 
+def thread_tss_engine(no, msg):
+    print("Thread ")
+    print(no)
+    try:
+        engine = pyttsx3.init()
+        engine.say(msg)
+        engine.runAndWait()
+        engine.stop()
+    except Exception as e:
+        print("PROBLEM")
+        print(e)
 
-
-@blueprint.route('/poll/<int:trans_id>', methods=["GET"], endpoint='poll')
+@blueprint.route(
+    '/qep/tts/<int:trans_id>',
+    methods=["PUT", "POST"], endpoint='qep_tts'
+)
 @login_required
-def poll(trans_id):
+def qep_tts(trans_id):
+    thread.start_new_thread(thread_tss_engine, (1, request.data,))
+    return success_return()
+
+@blueprint.route('/poll/<int:trans_id>/<int:tts>', methods=["GET"], endpoint='poll')
+@login_required
+def poll(trans_id, tts):
     """
     This method polls the result of the asynchronous query and returns the result.
 
@@ -563,6 +611,8 @@ def poll(trans_id):
     status, error_msg, conn, trans_obj, session_obj = check_transaction_status(trans_id)
     if status and conn is not None and session_obj is not None:
         status, result = conn.poll(formatted_exception_msg=True, no_result=True)
+        print("Result con poll")
+        print(result)
         if not status:
             return internal_server_error(result)
         elif status == ASYNC_OK:
@@ -579,6 +629,8 @@ def poll(trans_id):
                     conn.execute_void("ROLLBACK;")
 
             st, result = conn.async_fetchmany_2darray(ON_DEMAND_RECORD_COUNT)
+            print("Result con async 2d")
+            print(result)
             if st:
                 if 'primary_keys' in session_obj:
                     primary_keys = session_obj['primary_keys']
@@ -636,6 +688,9 @@ def poll(trans_id):
                 # status of async_fetchmany_2darray is True and result is none
                 # means nothing to fetch
                 if result and rows_affected > -1:
+                    print("Result row affected > -1")
+                    print(result)
+
                     res_len = len(result)
                     if res_len == ON_DEMAND_RECORD_COUNT:
                         has_more_rows = True
@@ -676,13 +731,28 @@ def poll(trans_id):
     # original result.
     if status == 'Success' and result is None:
         result = conn.status_message()
+        print("Poll result before additional message")
+        print(result)
+        print("additional message")
+        print(additional_messages)
         if (result != 'SELECT 1' or result != 'SELECT 0') \
             and result is not None and additional_messages:
             result = additional_messages + result
+    
+    print("Poll result")
+    print(result)
 
+    qep_info = ""
+
+    if status == 'Success' and tts == 1:
+        if type(result) is list and type(result[0]) is list and type(result[0][0]) is list and type(result[0][0][0]) is dict and "Plan" in result[0][0][0]:
+            qep_info = process_node(result[0][0][0]["Plan"], 0)
+            qep_info = ' '.join(qep_info)
+    
     return make_json_response(
         data={
             'status': status, 'result': result,
+            "qep_info": qep_info,
             'rows_affected': rows_affected,
             'rows_fetched_from': rows_fetched_from,
             'rows_fetched_to': rows_fetched_to,
@@ -694,7 +764,6 @@ def poll(trans_id):
             'client_primary_key': client_primary_key
         }
     )
-
 
 @blueprint.route('/fetch/<int:trans_id>', methods=["GET"], endpoint='fetch')
 @blueprint.route('/fetch/<int:trans_id>/<int:fetch_all>', methods=["GET"], endpoint='fetch_all')

@@ -1,12 +1,11 @@
 from __future__ import print_function
 
 import json
-import sys
 
 import handler
 import pyttsx3
 
-engine = pyttsx3.init('nsss')
+engine = pyttsx3.init()
 
 class TempResultCounter:
     def __init__(self):
@@ -103,9 +102,4 @@ def main(filename):
     filter_tree(qep)
 
 if __name__ == '__main__':
-    if len(sys.argv) <= 1:
-        print('Using hardcoded json file path..')
-        main('./examples/8.json')
-    else:
-        file_path = sys.argv[1]
-        main(file_path)
+    main('./examples/update.json')

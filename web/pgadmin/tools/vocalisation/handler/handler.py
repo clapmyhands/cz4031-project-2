@@ -290,16 +290,11 @@ class SortHandler(Handler):
         sort_method = node.get('Sort Method')
         sort_key = Handler.stringify_list(node.get('Sort Key'))
         space_type = node.get('Sort Space Type')
-        if sort_method is None:
-            sort_method = "Sort"
-        text = "Do {} on the result with sort key: {}"\
-            .format(sort_method, sort_key)
-        if space_type:
-            text += " in {}".format(space_type)
+        text = "Do {} on the result with sort key: {} in {}."\
+            .format(sort_method, sort_key, space_type)
         subplan = node.get('Subplan Name')
         if subplan:
             text = "Create {} by ".format(subplan) + text
-        text += "."
         print(text)
         return [text]
 
@@ -425,17 +420,11 @@ class UniqueHandler(Handler):
         Handler.__init__(self)
 
     def handle(self, node, childs):
-        attribute_name = None
-        output = node.get('Output')
-        if output:
-            attribute_name = node.get('Output')[0]
-        text = "Take unique values"
-        if attribute_name:
-            text += " of {}".format(attribute_name)
-        text += " from result."
+        attribute_name = node.get('Output')[0]
+        text = "Take unique values of {} from result.".format(attribute_name)
         subplan = node.get('Subplan Name')
         if subplan:
-            text += "Create {} by ".format(subplan) + text
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 

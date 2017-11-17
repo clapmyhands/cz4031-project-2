@@ -1,0 +1,75 @@
+[
+   {
+     "Plan": {
+       "Node Type": "Bitmap Heap Scan",
+       "Parallel Aware": false,
+       "Relation Name": "test3",
+       "Schema": "public",
+       "Alias": "test3",
+       "Startup Cost": 1209.26,
+       "Total Cost": 7030.81,
+       "Plan Rows": 63267,
+       "Plan Width": 8,
+       "Actual Startup Time": 12.568,
+       "Actual Total Time": 31.231,
+       "Actual Rows": 60953,
+       "Actual Loops": 1,
+       "Output": ["id", "i"],
+       "Recheck Cond": "((test3.i < 5000000) OR (test3.i > 950000000))",
+       "Rows Removed by Index Recheck": 0,
+       "Exact Heap Blocks": 4868,
+       "Lossy Heap Blocks": 0,
+       "Plans": [
+         {
+           "Node Type": "BitmapOr",
+           "Parent Relationship": "Outer",
+           "Parallel Aware": false,
+           "Startup Cost": 1209.26,
+           "Total Cost": 1209.26,
+           "Plan Rows": 63570,
+           "Plan Width": 0,
+           "Actual Startup Time": 11.825,
+           "Actual Total Time": 11.825,
+           "Actual Rows": 0,
+           "Actual Loops": 1,
+           "Plans": [
+             {
+               "Node Type": "Bitmap Index Scan",
+               "Parent Relationship": "Member",
+               "Parallel Aware": false,
+               "Index Name": "test3_i_idx",
+               "Startup Cost": 0.00,
+               "Total Cost": 107.78,
+               "Plan Rows": 5781,
+               "Plan Width": 0,
+               "Actual Startup Time": 3.423,
+               "Actual Total Time": 3.423,
+               "Actual Rows": 5476,
+               "Actual Loops": 1,
+               "Index Cond": "(test3.i < 5000000)"
+             },
+             {
+               "Node Type": "Bitmap Index Scan",
+               "Parent Relationship": "Member",
+               "Parallel Aware": false,
+               "Index Name": "test3_i_idx",
+               "Startup Cost": 0.00,
+               "Total Cost": 1069.85,
+               "Plan Rows": 57789,
+               "Plan Width": 0,
+               "Actual Startup Time": 8.400,
+               "Actual Total Time": 8.400,
+               "Actual Rows": 55477,
+               "Actual Loops": 1,
+               "Index Cond": "(test3.i > 950000000)"
+             }
+           ]
+         }
+       ]
+     },
+     "Planning Time": 3.435,
+     "Triggers": [
+     ],
+     "Execution Time": 36.326
+   }
+]
