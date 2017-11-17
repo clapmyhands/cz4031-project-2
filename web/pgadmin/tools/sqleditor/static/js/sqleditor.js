@@ -85,6 +85,7 @@ define('tools.querytool', [
       "click .noclose": 'do_not_close_menu',
       "click #btn-explain": "on_explain",
       "click #btn-explain-analyze": "on_explain_analyze",
+      "click #btn-explain-tts": "on_explain_tts",
       "click #btn-explain-verbose": "on_explain_verbose",
       "click #btn-explain-costs": "on_explain_costs",
       "click #btn-explain-buffers": "on_explain_buffers",
@@ -197,7 +198,7 @@ define('tools.querytool', [
 
       var explain = new pgAdmin.Browser.Panel({
         name: 'explain',
-        title: gettext("Explain"),
+        title: gettext("Explain (Diagram)"),
         width: '100%',
         height: '100%',
         isCloseable: false,
@@ -207,7 +208,7 @@ define('tools.querytool', [
 
       var explain_tts = new pgAdmin.Browser.Panel({
         name: 'explain_tts',
-        title: gettext("Explain TTS"),
+        title: gettext("Explain (Text)"),
         width: '100%',
         height: '100%',
         isCloseable: false,
@@ -245,7 +246,7 @@ define('tools.querytool', [
       // Add all the panels to the docker
       self.data_output_panel = main_docker.addPanel('data_output', wcDocker.DOCK.BOTTOM, sql_panel_obj);
       self.explain_panel = main_docker.addPanel('explain', wcDocker.DOCK.STACKED, self.data_output_panel);
-      self.explain_tts = main_docker.addPanel('explain_tts', wcDocker.DOCK.STACKED, self.data_output_panel);
+      self.explain_tts_panel = main_docker.addPanel('explain_tts', wcDocker.DOCK.STACKED, self.data_output_panel);
       self.messages_panel = main_docker.addPanel('messages', wcDocker.DOCK.STACKED, self.data_output_panel);
       self.history_panel = main_docker.addPanel('history', wcDocker.DOCK.STACKED, self.data_output_panel);
 
@@ -1426,6 +1427,13 @@ define('tools.querytool', [
 
       queryToolActions.explainAnalyze(this.handler);
     },
+    
+    on_explain_tts: function (event) {
+      this._stopEventPropogation(event);
+      this._closeDropDown(event);
+
+      queryToolActions.explainTTS(this.handler);
+    },
 
     // Callback function for explain option "verbose" button click
     on_explain_verbose: function (ev) {
@@ -1774,13 +1782,15 @@ define('tools.querytool', [
        * till the status is 'Success' or 'NotConnected'. If status is
        * 'Success' then call the render method to render the data.
        */
-      _poll: function () {
+      _poll: function (tts) {
         var self = this;
-
+        if (tts == undefined)
+          tts = 0;
+        
         setTimeout(
           function () {
             $.ajax({
-              url: url_for('sqleditor.poll', {'trans_id': self.transId}),
+              url: url_for('sqleditor.poll', {'trans_id': self.transId, 'tts': tts}),
               method: 'GET',
               success: function (res) {
                 if (res.data.status === 'Success') {
@@ -1794,7 +1804,7 @@ define('tools.querytool', [
                 }
                 else if (res.data.status === 'Busy') {
                   // If status is Busy then poll the result by recursive call to the poll function
-                  self._poll();
+                  self._poll(tts);
                   is_query_running = true;
                   if (res.data.result) {
                     self.update_msg_history(res.data.status, res.data.result, false);
@@ -1950,35 +1960,35 @@ define('tools.querytool', [
                   pgExplain.DrawJSONPlan(
                     $('.sql-editor-explain'), data.result[0][0]
                   );
-                  let qep_info = '\n\n' + 'Query Plan Describtion:\n' + data.qep_info + 
-                    "\n\nPlease look at Explain Panel for visualization" + '\n\n';
-                  self.update_msg_history(true, qep_info, false);
-                  $.ajax({
-                    url: url_for('sqleditor.qep_tts', {'trans_id': self.transId}),
-                    method: 'POST',
-                    contentType: "application/json",
-                    data: JSON.stringify(qep_info),
-                    success: function (res) {
-                      if (res.success == 1) {
-                        console.log("TTS complete");
+                  if (data.qep_info != "") {
+                    self.update_explain_tts(data.qep_info);
+                    $.ajax({
+                      url: url_for('sqleditor.qep_tts', {'trans_id': self.transId}),
+                      method: 'POST',
+                      contentType: "application/json",
+                      data: JSON.stringify(data.qep_info),
+                      success: function (res) {
+                        if (res.success == 1) {
+                          console.log("TTS complete");
+                        }
+                      },
+                      error: function (e) {
+                        if (e.readyState == 0) {
+                          self.update_msg_history(false,
+                            gettext("Not connected to the server or the connection to the server has been closed.")
+                          );
+                          return;
+                        }
+            
+                        var msg = e.responseText;
+                        if (e.responseJSON != undefined &&
+                          e.responseJSON.errormsg != undefined)
+                          msg = e.responseJSON.errormsg;
+            
+                        self.update_msg_history(false, msg);
                       }
-                    },
-                    error: function (e) {
-                      if (e.readyState == 0) {
-                        self.update_msg_history(false,
-                          gettext("Not connected to the server or the connection to the server has been closed.")
-                        );
-                        return;
-                      }
-          
-                      var msg = e.responseText;
-                      if (e.responseJSON != undefined &&
-                        e.responseJSON.errormsg != undefined)
-                        msg = e.responseJSON.errormsg;
-          
-                      self.update_msg_history(false, msg);
-                    }
-                  });
+                    });
+                  }
                 }, 10
               );
             } else {
@@ -2125,6 +2135,13 @@ define('tools.querytool', [
 
       resetQueryHistoryObject: function (history) {
         history.total_time = '-';
+      },
+
+      //This function is used to write text generated from data
+      update_explain_tts: function (msg) {
+        var self = this;
+        self.gridView.explain_tts_panel.focus();
+        $('.sql-editor-explain-tts').text(msg);
       },
 
       // This function is used to raise appropriate message.
@@ -3171,11 +3188,13 @@ define('tools.querytool', [
 
       // This function will fetch the sql query from the text box
       // and execute the query.
-      execute: function (explain_prefix) {
+      execute: function (explain_prefix, tts) {
         var self = this,
           sql = '',
           history_msg = '';
         
+        if (tts == undefined)
+          tts = 0;
         //console.log("TTS: ");
         //console.log(tts);
         self.has_more_rows = false;
@@ -3244,7 +3263,7 @@ define('tools.querytool', [
               self.info_notifier_timeout = res.data.info_notifier_timeout;
 
               // If status is True then poll the result.
-              self._poll();
+              self._poll(tts);
             }
             else {
               self.trigger('pgadmin-sqleditor:loading-icon:hide');

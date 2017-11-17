@@ -29,6 +29,11 @@ from pgadmin.utils.menu import MenuItem
 
 from config import PG_DEFAULT_DRIVER, ON_DEMAND_RECORD_COUNT
 
+#Custom feature extention
+from ..vocalisation.vocalisation import process_node
+import pyttsx3
+import thread
+
 MODULE_NAME = 'sqleditor'
 
 # import unquote from urllib for python2.x and python3.x
@@ -50,6 +55,7 @@ TX_STATUS__ACTIVE = 1
 TX_STATUS_INTRANS = 2
 TX_STATUS_INERROR = 3
 
+engine = pyttsx3.init()
 
 class SqlEditorModule(PgAdminModule):
     """
@@ -559,20 +565,21 @@ def preferences(trans_id):
 
         return success_return()
 
+def thread_tss_engine(no, msg):
+    print("Thread ")
+    print(no)
+    engine = pyttsx3.init()
+    engine.say(msg)
+    engine.runAndWait()
+    engine.stop()
+
 @blueprint.route(
     '/qep/tts/<int:trans_id>',
     methods=["PUT", "POST"], endpoint='qep_tts'
 )
 @login_required
 def qep_tts(trans_id):
-    import pyttsx3
-    import pythoncom
-
-    qep_text = request.data
-    pythoncom.CoInitialize()
-    engine = pyttsx3.init()
-    engine.say("helooooooooo")
-    engine.runAndWait()
+    thread.start_new_thread(thread_tss_engine, (1, request.data,))
 
     return success_return()
 
@@ -736,7 +743,8 @@ def poll(trans_id, tts):
 
     if status == 'Success' and tts == 1:
         if type(result) is list and type(result[0]) is list and type(result[0][0]) is list and type(result[0][0][0]) is dict and "Plan" in result[0][0][0]:
-            qep_info = "Hellooo"
+            qep_info = process_node(result[0][0][0]["Plan"], 0)
+            qep_info = ' '.join(qep_info)
     
     return make_json_response(
         data={
