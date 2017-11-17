@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import json
+import sys
 
 import handler
 import pyttsx3
@@ -98,4 +99,9 @@ def main(filename):
     filter_tree(qep)
 
 if __name__ == '__main__':
-    main('./examples/worktable_scan.json')
+    if len(sys.argv) <= 1:
+        print('Using hardcoded json file path..')
+        main('./examples/unique.json')
+    else:
+        file_path = sys.argv[1]
+        main(file_path)
