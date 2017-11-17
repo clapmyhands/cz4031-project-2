@@ -1,0 +1,99 @@
+[
+   {
+     "Plan": {
+       "Node Type": "Limit",
+       "Parallel Aware": false,
+       "Startup Cost": 8.48,
+       "Total Cost": 8.51,
+       "Plan Rows": 1,
+       "Plan Width": 20,
+       "Actual Startup Time": 5.537,
+       "Actual Total Time": 5.537,
+       "Actual Rows": 1,
+       "Actual Loops": 1,
+       "Output": ["resultset.id", "resultset.i_rank", "resultset.previous_j", "resultset.next_j"],
+       "Plans": [
+         {
+           "Node Type": "WindowAgg",
+           "Parent Relationship": "InitPlan",
+           "Subplan Name": "CTE resultset",
+           "Parallel Aware": false,
+           "Startup Cost": 8.46,
+           "Total Cost": 8.48,
+           "Plan Rows": 1,
+           "Plan Width": 24,
+           "Actual Startup Time": 5.503,
+           "Actual Total Time": 5.503,
+           "Actual Rows": 1,
+           "Actual Loops": 1,
+           "Output": ["test3.id", "rank() OVER (?)", "lag(test3.j) OVER (?)", "lead(test3.j) OVER (?)", "test3.i"],
+           "Plans": [
+             {
+               "Node Type": "Sort",
+               "Parent Relationship": "Outer",
+               "Parallel Aware": false,
+               "Startup Cost": 8.46,
+               "Total Cost": 8.46,
+               "Plan Rows": 1,
+               "Plan Width": 12,
+               "Actual Startup Time": 5.453,
+               "Actual Total Time": 5.454,
+               "Actual Rows": 1,
+               "Actual Loops": 1,
+               "Output": ["test3.id", "test3.i", "test3.j"],
+               "Sort Key": ["test3.i"],
+               "Sort Method": "quicksort",
+               "Sort Space Used": 25,
+               "Sort Space Type": "Memory",
+               "Plans": [
+                 {
+                   "Node Type": "Index Scan",
+                   "Parent Relationship": "Outer",
+                   "Parallel Aware": false,
+                   "Scan Direction": "Forward",
+                   "Index Name": "test3_pkey",
+                   "Relation Name": "test3",
+                   "Schema": "public",
+                   "Alias": "test3",
+                   "Startup Cost": 0.43,
+                   "Total Cost": 8.45,
+                   "Plan Rows": 1,
+                   "Plan Width": 12,
+                   "Actual Startup Time": 0.046,
+                   "Actual Total Time": 0.047,
+                   "Actual Rows": 1,
+                   "Actual Loops": 1,
+                   "Output": ["test3.id", "test3.i", "test3.j"],
+                   "Index Cond": "(test3.id = 4)",
+                   "Rows Removed by Index Recheck": 0
+                 }
+               ]
+             }
+           ]
+         },
+         {
+           "Node Type": "CTE Scan",
+           "Parent Relationship": "Outer",
+           "Parallel Aware": false,
+           "CTE Name": "resultset",
+           "Alias": "resultset",
+           "Startup Cost": 0.00,
+           "Total Cost": 0.02,
+           "Plan Rows": 1,
+           "Plan Width": 20,
+           "Actual Startup Time": 5.535,
+           "Actual Total Time": 5.535,
+           "Actual Rows": 1,
+           "Actual Loops": 1,
+           "Output": ["resultset.id", "resultset.i_rank", "resultset.previous_j", "resultset.next_j"],
+           "Filter": "(resultset.id = 4)",
+           "Rows Removed by Filter": 0
+         }
+       ]
+     },
+     "Planning Time": 0.281,
+     "Triggers": [
+     ],
+     "Execution Time": 5.612
+   }
+ ]

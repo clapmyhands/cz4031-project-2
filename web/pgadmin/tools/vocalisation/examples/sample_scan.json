@@ -1,0 +1,44 @@
+[
+   {
+     "Plan": {
+       "Node Type": "Aggregate",
+       "Strategy": "Plain",
+       "Partial Mode": "Simple",
+       "Parallel Aware": false,
+       "Startup Cost": 18767.00,
+       "Total Cost": 18767.01,
+       "Plan Rows": 1,
+       "Plan Width": 32,
+       "Actual Startup Time": 238.957,
+       "Actual Total Time": 238.957,
+       "Actual Rows": 1,
+       "Actual Loops": 1,
+       "Output": ["avg(i)"],
+       "Plans": [
+         {
+           "Node Type": "Sample Scan",
+           "Parent Relationship": "Outer",
+           "Parallel Aware": false,
+           "Relation Name": "test3",
+           "Schema": "public",
+           "Alias": "test3",
+           "Startup Cost": 0.00,
+           "Total Cost": 17392.00,
+           "Plan Rows": 550000,
+           "Plan Width": 4,
+           "Actual Startup Time": 0.043,
+           "Actual Total Time": 161.237,
+           "Actual Rows": 546305,
+           "Actual Loops": 1,
+           "Output": ["id", "i", "j", "h"],
+           "Sampling Method": "system",
+           "Sampling Parameters": ["'50'::real"]
+         }
+       ]
+     },
+     "Planning Time": 0.099,
+     "Triggers": [
+     ],
+     "Execution Time": 240.959
+   }
+]

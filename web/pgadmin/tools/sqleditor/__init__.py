@@ -568,10 +568,14 @@ def preferences(trans_id):
 def thread_tss_engine(no, msg):
     print("Thread ")
     print(no)
-    engine = pyttsx3.init()
-    engine.say(msg)
-    engine.runAndWait()
-    engine.stop()
+    try:
+        engine = pyttsx3.init()
+        engine.say(msg)
+        engine.runAndWait()
+        engine.stop()
+    except Exception as e:
+        print("PROBLEM")
+        print(e)
 
 @blueprint.route(
     '/qep/tts/<int:trans_id>',
@@ -580,7 +584,6 @@ def thread_tss_engine(no, msg):
 @login_required
 def qep_tts(trans_id):
     thread.start_new_thread(thread_tss_engine, (1, request.data,))
-
     return success_return()
 
 @blueprint.route('/poll/<int:trans_id>/<int:tts>', methods=["GET"], endpoint='poll')

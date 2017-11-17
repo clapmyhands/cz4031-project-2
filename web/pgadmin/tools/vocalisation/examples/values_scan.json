@@ -1,0 +1,41 @@
+[
+   {
+     "Plan": {
+       "Node Type": "ModifyTable",
+       "Operation": "Insert",
+       "Parallel Aware": false,
+       "Relation Name": "test",
+       "Schema": "public",
+       "Alias": "test",
+       "Startup Cost": 0.00,
+       "Total Cost": 0.03,
+       "Plan Rows": 2,
+       "Plan Width": 62,
+       "Actual Startup Time": 0.092,
+       "Actual Total Time": 0.092,
+       "Actual Rows": 0,
+       "Actual Loops": 1,
+       "Plans": [
+         {
+           "Node Type": "Values Scan",
+           "Parent Relationship": "Member",
+           "Parallel Aware": false,
+           "Alias": "*VALUES*",
+           "Startup Cost": 0.00,
+           "Total Cost": 0.03,
+           "Plan Rows": 2,
+           "Plan Width": 62,
+           "Actual Startup Time": 0.018,
+           "Actual Total Time": 0.020,
+           "Actual Rows": 2,
+           "Actual Loops": 1,
+           "Output": ["\"*VALUES*\".column1", "\"*VALUES*\".column2"]
+         }
+       ]
+     },
+     "Planning Time": 0.137,
+     "Triggers": [
+     ],
+     "Execution Time": 0.156
+   }
+]
