@@ -18,9 +18,11 @@ class Handler:
         return my_list
 
     @staticmethod
-    def childs_to_string(childs=None):
+    def list_to_string(childs=None):
         if childs:
-            if len(childs) == 2:
+            if len(childs) == 1:
+                return childs[0]
+            elif len(childs) == 2:
                 return "{} and {}".format(*childs)
             else:
                 childs[-1] = "and " + childs[-1]
@@ -40,8 +42,11 @@ class ScanHandler(Handler):
         direction = node.get('Scan Direction')
         if direction:
             scan_type += " " + direction
+        text = "Do {}".format(scan_type)
+
         relation = node.get('Relation Name')
-        text = "Do {} in relation '{}'".format(scan_type, relation)
+        if relation:
+            text += " in relation '{}'".format(relation)
 
         alias = node.get('Alias')
         if alias and alias != relation:
@@ -56,6 +61,11 @@ class ScanHandler(Handler):
             text += " with index '{}'".format(index_name)
 
         text += '.'
+
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
+
         print(text)
         return [text]
 
@@ -93,6 +103,9 @@ class BitmapHeapScanHandler(Handler):
             text += " with index '{}'".format(index_name)
 
         text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -114,6 +127,9 @@ class BitmapIndexScanHandler(Handler):
             text += ' with condition: {}'.format(index_cond)
 
         text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -132,6 +148,9 @@ class SubqueryScanHandler(Handler):
         if alias:
             text += "and use {} as alias".format(alias)
         text += "."
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -159,8 +178,12 @@ class ValuesScanHandler(Handler):
             text += " with alias '{}'".format(alias)
 
         text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
+
 
 class CTEScanHandler(Handler):
     def __init__(self):
@@ -169,11 +192,76 @@ class CTEScanHandler(Handler):
     def handle(self, node, childs):
         node_type = node.get('Node Type')
         cte_name = node.get('CTE Name')
-        alias = node.get('Alias')
-        text = 'Do {} on result set {} with alias {}.'.format(node_type, cte_name, alias)
+        text = 'Do {} on CTE {}'.format(node_type, cte_name)
 
+        alias = node.get('Alias')
+        if alias and alias != cte_name:
+            text += " with alias '{}'".format(alias)
+
+        text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
+
+
+class SampleScanHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        node_type = node.get('Node Type')
+        relation = node.get('Relation Name')
+
+        text = "{} on relation '{}'".format(node_type, relation)
+
+        method = node.get('Sampling Method')
+        if method:
+            text = "{} {}".format(method, text)
+
+        alias = node.get('Alias')
+        if alias and alias != relation:
+            text += " with alias '{}'".format(alias)
+
+        parameter = node.get('Sampling Parameters')
+        parameter = Handler.stringify_list(parameter)
+        if parameter:
+            text += " with parameter: {}".format(Handler.list_to_string(parameter))
+
+        text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
+        print(text)
+        return [text]
+
+
+class TidScanHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        node_type = node.get('Node Type')
+        relation = node.get('Relation Name')
+
+        text = "{} on relation '{}'".format(node_type, relation)
+
+        alias = node.get('Alias')
+        if alias and alias != relation:
+            text += " with alias '{}'".format(alias)
+
+        cond = node.get('Filter', node.get('TID Cond'))
+        if cond:
+            text += " with condition: {}".format(cond)
+
+        text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
+        print(text)
+        return [text]
+        pass
 
 
 class LimitHandler(Handler):
@@ -186,6 +274,9 @@ class LimitHandler(Handler):
         if limit_row > 1:
             text += 's'
         text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -201,6 +292,9 @@ class SortHandler(Handler):
         space_type = node.get('Sort Space Type')
         text = "Do {} on the result with sort key: {} in {}."\
             .format(sort_method, sort_key, space_type)
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -212,6 +306,9 @@ class HashHandler(Handler):
     def handle(self, node, childs):
         buckets = node.get('Hash Buckets')
         text = "Hash the result using {} buckets.".format(buckets)
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -232,11 +329,14 @@ class AggregateHandler(Handler):
         text = "Do {} on the result".format(node_type)
 
         if output:
-            text += " to get {}".format(output)
+            text += " to get {}".format(Handler.list_to_string(output))
 
         if group_key:
-            text += " using group key: {}".format(group_key)
+            text += " using group key: {}".format(Handler.list_to_string(group_key))
         text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -245,8 +345,12 @@ class AppendHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle_with_childs(self, node, childs):
-        text = "Append: {}.".format(self.childs_to_string(childs))
+    def handle(self, node, childs):
+        node_type = node.get('Node Type')
+        text = "{}: {}.".format(node_type, self.list_to_string(childs))
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -256,13 +360,16 @@ class HashJoinHandler(Handler):
         Handler.__init__(self)
 
 
-    def handle_with_childs(self, node, childs):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         join_type = node.get('Join Type')
         join_cond = node.get('Hash Cond')
         tmp = node_type.split(" ")
         tmp = " ".join((tmp[0],join_type,tmp[1]))
-        text = "{} on {} with condition: {}.".format(tmp, self.childs_to_string(childs), join_cond)
+        text = "{} on {} with condition: {}.".format(tmp, self.list_to_string(childs), join_cond)
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -271,13 +378,21 @@ class NestedLoopJoinHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle_with_childs(self, node, childs):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         join_type = node.get('Join Type')
-        join_cond = node.get('Join Filter')
         tmp = node_type.split(" ")
         tmp = " ".join((tmp[0],join_type,tmp[1]))
-        text = "{} on {} with condition: {}.".format(tmp, self.childs_to_string(childs), join_cond)
+        text = "{} on {}".format(tmp, self.list_to_string(childs))
+
+        join_cond = node.get('Join Filter')
+        if join_cond:
+            text += " with condition: {}".format(join_cond)
+
+        text += '.'
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -286,13 +401,16 @@ class MergeJoinHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle_with_childs(self, node, childs):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         join_type = node.get('Join Type')
         join_cond = node.get('Merge Cond')
         tmp = node_type.split(" ")
         tmp = " ".join((tmp[0],join_type,tmp[1]))
-        text = "{} on {} with condition: {}.".format(tmp, self.childs_to_string(childs), join_cond)
+        text = "{} on {} with condition: {}.".format(tmp, self.list_to_string(childs), join_cond)
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -304,6 +422,9 @@ class UniqueHandler(Handler):
     def handle(self, node, childs):
         attribute_name = node.get('Output')[0]
         text = "Take unique values of {} from result.".format(attribute_name)
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         print(text)
         return [text]
 
@@ -341,17 +462,23 @@ class UpdateHandler(Handler):
         Handler.__init__(self)
 
     def handle(self, node, childs):
-        pass
+        relation = node.get('Relation Name')
+        text = "Update result from relation {}.".format(relation)
+        print(text)
+        return [text]
 
 
 class BitmapHandler(Handler):
     def __init__(self):
         Handler.__init__(self)
 
-    def handle_with_childs(self, node, childs):
+    def handle(self, node, childs):
         node_type = node.get('Node Type')
         tmp = ' '.join((node_type[:6], node_type[6:]))  # Bitmap --> 6 char
-        text = 'Do {} on {}'.format(tmp, self.childs_to_string(childs))
+        text = 'Do {} on {}'.format(tmp, self.list_to_string(childs))
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         text += '.'
         print(text)
         return [text]
@@ -364,6 +491,9 @@ class MaterializeHandler(Handler):
     def handle(self, node, childs):
         node_type = node.get('Node Type')
         text = '{} the result'.format(node_type)
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
         text += '.'
         print(text)
         return [text]
@@ -379,9 +509,105 @@ class ResultHandler(Handler):
 
         output = Handler.stringify_list(node.get('Output'))
         if output:
-            text += " with output: {}".format(output)
+            text += " with output: {}".format(Handler.list_to_string(output))
+
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
+        text += '.'
+        print(text)
+        return [text]
+
+
+class SetOpHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        command = node.get('Command')
+        strategy = node.get('Strategy')
+        node_type = '{} Set Operator {}'.format(strategy, command)
+
+        text = 'Do {} on result'.format(node_type)
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
+        text += '.'
+        print(text)
+        return [text]
+
+
+class GroupHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        text = 'Group result'
+
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
+
+        group_key = Handler.stringify_list(node.get('Group Key'))
+        if group_key:
+            text += ' on group key: {}'.format(Handler.list_to_string(group_key))
+        text += '.'
+
+        print(text)
+        return [text]
+
+
+class GatherMergeHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        pass
+
+
+class WindowAggHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        node_type = node.get('Node Type')
+
+        text = "Window Aggregate the result"
+
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
 
         text += '.'
+
+        print(text)
+        return [text]
+
+class RecursiveUnionHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        node_type = node.get('Node Type')
+
+        text = "Recursive Union the result"
+
+        subplan = node.get('Subplan Name')
+        if subplan:
+            text = "Create {} by ".format(subplan) + text
+
+        text += '.'
+
+        print(text)
+        return [text]
+
+
+class LockRowsHandler(Handler):
+    def __init__(self):
+        Handler.__init__(self)
+
+    def handle(self, node, childs):
+        text = "Lock the rows of the result."
         print(text)
         return [text]
 
@@ -392,15 +618,23 @@ handler = {
     "Seq Scan": ScanHandler(),
     "Bitmap Index Scan": BitmapIndexScanHandler(),
     "Bitmap Heap Scan": BitmapHeapScanHandler(),
+    "Index Scan": ScanHandler(),
     "Index Only Scan": ScanHandler(),
     "Subquery Scan": SubqueryScanHandler(),
     "Function Scan": FunctionScanHandler(),
     "Values Scan": ValuesScanHandler(),
     "CTE Scan": CTEScanHandler(),
+    "Sample Scan": SampleScanHandler(),
+    "Tid Scan": TidScanHandler(),
+    "WorkTable Scan": ScanHandler(),
+    "Foreign Scan": ScanHandler(),
+    "Custom Scan": ScanHandler(),
+    "WindowAgg": WindowAggHandler(),
     "Sort": SortHandler(),
     "Hash": HashHandler(),
     "Aggregate": AggregateHandler(),
     "Append": AppendHandler(),
+    "Merge Append": AppendHandler(),
     "Hash Join": HashJoinHandler(),
     "Nested Loop": NestedLoopJoinHandler(),
     "Merge Join": MergeJoinHandler(),
@@ -410,7 +644,12 @@ handler = {
     "Delete": DeleteHandler(),
     "Insert": InsertHandler(),
     "Update": UpdateHandler(),
-    "Result": ResultHandler()
+    "Result": ResultHandler(),
+    "SetOp": SetOpHandler(),
+    "Group": GroupHandler(),
+    "Gather Merge": GatherMergeHandler(),
+    "Recursive Union": RecursiveUnionHandler(),
+    "LockRows": LockRowsHandler()
 }
 
 def get_handler_for_nodetype(node_type):

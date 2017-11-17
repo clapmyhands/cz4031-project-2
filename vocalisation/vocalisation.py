@@ -68,9 +68,13 @@ def process_node(node, depth, single_child=True):
     handler_class = handler.get_handler_for_nodetype(node_type)
     if handler_class:
         current_txt = handler_class.handle(node, resolved)
+        if any(word in current_txt[0].split(' ') for word in ('CTE', 'InitPlan', 'SubPlan')):
+            single_child=True
 
     if child_txt: string_builder.extend(child_txt)
-    if current_txt: string_builder.extend(current_txt)
+    if current_txt:
+        string_builder.extend(current_txt)
+
     if not single_child:
         temp_result_txt = "Keep temporary result as {}.".format(trc.get_temp_name())
         print(temp_result_txt)
@@ -98,4 +102,4 @@ def main(filename):
     filter_tree(qep)
 
 if __name__ == '__main__':
-    main('./examples/worktable_scan.json')
+    main('./examples/update.json')
